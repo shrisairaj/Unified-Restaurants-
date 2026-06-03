@@ -1,0 +1,34 @@
+.custom-shadow {
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.form-check-input {
+    height: 2rem;
+    width: 4rem !important;
+    border-color: #49ac60 !important;
+}
+
+.form-check-input:checked {
+    background-color: #49ac60 !important;
+    border-color: #49ac60 !important;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(73, 172, 96, 0.5);
+    outline: none;
+}
+
+.setting-title {
+    color: #49ac60;
+}
+
+.user-details {
+    width: 60%;
+}
+
+@media (max-width: 380px) {
+    .user-details {
+        width: 90%;
+    }
+}

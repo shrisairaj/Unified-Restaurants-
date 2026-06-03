@@ -1,0 +1,13 @@
+{
+  "name": "rasops-report-builder",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-report.mjs"
+  },
+  "dependencies": {
+    "html-to-docx": "^1.8.0",
+    "marked": "^15.0.6",
+    "puppeteer": "^24.2.0"
+  }
+}

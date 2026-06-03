@@ -1,0 +1,42 @@
+.carousel-item-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 280px;
+    border-radius: 10px;
+}
+
+.carousel-content {
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.carousel-content h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.carousel-content p {
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.order-bill-table td,
+.order-bill-table th {
+    background-color: transparent;
+}
+
+.table-borders {
+    border: 1px solid rgba(73, 172, 96, 0.37);
+}
+
+.active-orders-container {
+    background-color: rgba(73, 172, 96, 0.37);
+    position: relative;
+}
+
+.active-order-done-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

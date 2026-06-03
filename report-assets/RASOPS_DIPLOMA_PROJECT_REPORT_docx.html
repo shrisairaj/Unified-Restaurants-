@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RASOPS Diploma Project Report</title>
+  <style>
+    @page { size: A4; margin: 22mm 18mm 24mm 18mm; }
+    body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.55; color: #1a1a1a; }
+    h1 { font-size: 22pt; color: #0d233f; page-break-before: always; border-bottom: 2px solid #49ac60; padding-bottom: 6px; }
+    h1:first-of-type { page-break-before: avoid; }
+    h2 { font-size: 16pt; color: #0d233f; margin-top: 1.2em; }
+    h3 { font-size: 13pt; color: #2c5282; }
+    h4 { font-size: 11.5pt; color: #333; }
+    p, li { text-align: justify; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; page-break-inside: avoid; }
+    th, td { border: 1px solid #cbd5e0; padding: 8px 10px; vertical-align: top; }
+    th { background: #edf2f7; font-weight: 600; text-align: left; }
+    tr:nth-child(even) td { background: #f7fafc; }
+    img { max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin: 10px 0; page-break-inside: avoid; }
+    figure.screenshot { margin: 16px 0; page-break-inside: avoid; }
+    figcaption { font-size: 9.5pt; color: #4a5568; font-style: italic; margin-top: 6px; }
+    pre, code { font-family: Consolas, monospace; font-size: 9pt; background: #f1f5f9; }
+    pre { padding: 12px; border-radius: 6px; overflow-x: auto; page-break-inside: avoid; }
+    .cover-page { page-break-after: always; min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .cover-border { border: 3px double #0d233f; padding: 48px 40px; width: 90%; }
+    .cover-institute { font-size: 14pt; font-weight: 700; text-transform: uppercase; }
+    .cover-dept { font-size: 11pt; margin-bottom: 36px; }
+    .cover-title { font-size: 36pt; color: #49ac60; margin: 0; border: none; }
+    .cover-subtitle { font-size: 14pt; font-weight: 600; margin: 8px 0 24px; }
+    .cover-tag { font-size: 12pt; margin-bottom: 32px; }
+    .cover-meta table { border: none; margin: 0 auto; }
+    .cover-meta td { border: none; padding: 6px 16px; text-align: left; }
+    .cover-footer { margin-top: 40px; font-size: 10pt; color: #555; }
+    .toc-page { page-break-after: always; }
+    .toc-page h1 { page-break-before: avoid; }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; padding: 6px 0; font-size: 11pt; }
+    .diagram { margin: 20px 0; page-break-inside: avoid; }
+    .arch-box .tier { border: 2px solid #49ac60; background: #f0fff4; padding: 12px; margin: 8px 0; text-align: center; font-weight: 600; border-radius: 6px; }
+    .arch-box .tier-ext { background: #ebf8ff; border-color: #3182ce; font-weight: 500; font-size: 10pt; }
+    .arch-box .arrow { text-align: center; color: #49ac60; font-weight: bold; margin: 4px 0; }
+    .flow-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .flow-col { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; background: #fafafa; }
+    .flow-col h4 { margin-top: 0; color: #0d233f; text-align: center; }
+    .certificate-block { page-break-after: always; min-height: 60vh; }
+    .page-break { page-break-before: always; }
+  </style>
+</head>
+<body>
+  
+  <section class="cover-page">
+    <div class="cover-border">
+      <p class="cover-institute">[INSTITUTE NAME]</p>
+      <p class="cover-dept">Department of [Computer Science / Information Technology]</p>
+      <h1 class="cover-title">RASOPS</h1>
+      <h2 class="cover-subtitle">Restaurant / Hotel Order Management System</h2>
+      <p class="cover-tag">A Diploma Project Report</p>
+      <div class="cover-meta">
+        <table>
+          <tr><td><strong>Submitted By</strong></td><td>[Your Full Name]</td></tr>
+          <tr><td><strong>Enrollment No.</strong></td><td>[Roll Number]</td></tr>
+          <tr><td><strong>Academic Year</strong></td><td>2025 – 2026</td></tr>
+          <tr><td><strong>Guide</strong></td><td>[Guide Name]</td></tr>
+        </table>
+      </div>
+      <p class="cover-footer">Submitted in partial fulfilment of the requirements for the Diploma in Engineering</p>
+    </div>
+  </section>
+  <section class="certificate-block"><h2>CERTIFICATE</h2>
+<p>This is to certify that the project report entitled <strong>“Rasops – Restaurant / Hotel Order Management System”</strong> submitted by <strong>[Student Name]</strong> bearing enrollment number <strong>[Roll No.]</strong> is a bonafide record of work carried out by him/her under my supervision and guidance.</p>
+<p>The matter embodied in this report has not been submitted earlier for the award of any degree or diploma.</p>
+<p><br><br></p>
+<p><strong>Guide</strong><br>Name: _______________________<br>Designation: __________________<br>Signature: ___________________<br>Date: _______________________</p>
+<br>
+
+<p><strong>Head of Department</strong><br>Name: _______________________<br>Signature: ___________________<br>Date: _______________________</p>
+<div style="page-break-after: always;"></div>
+
+</section>
+  
+  <section class="toc-page"><h1>Table of Contents</h1><ul class="toc-list"><li><span>1. ABSTRACT</span></li><li><span>2. INTRODUCTION</span></li><li><span>3. PROBLEM STATEMENT</span></li><li><span>4. OBJECTIVES</span></li><li><span>5. SCOPE OF PROJECT</span></li><li><span>6. EXISTING SYSTEM VS PROPOSED SYSTEM</span></li><li><span>7. SOFTWARE & HARDWARE REQUIREMENTS</span></li><li><span>8. TECHNOLOGY STACK</span></li><li><span>9. FULL ARCHITECTURE DIAGRAM</span></li><li><span>10. COMPLETE WORKING FLOW</span></li><li><span>11. FRONTEND EXPLANATION (SCREEN-BY-SCREEN)</span></li><li><span>12. BACKEND EXPLANATION</span></li><li><span>13. DATABASE EXPLANATION WITH TABLES</span></li><li><span>14. API FLOW EXPLANATION</span></li><li><span>15. AUTHENTICATION & LOGIN FLOW</span></li><li><span>16. FULL MODULE EXPLANATION</span></li><li><span>17. EVERY BUTTON EXPLANATION</span></li><li><span>18. HOTELS MODULE – DEEP EXPLANATION</span></li><li><span>19. INVITES MODULE – DEEP EXPLANATION</span></li><li><span>20. MANAGERS MODULE – DEEP EXPLANATION</span></li><li><span>21. SETTINGS MODULE – DEEP EXPLANATION</span></li><li><span>22. DASHBOARD MODULE – DEEP EXPLANATION</span></li><li><span>23. MENU MODULE – DEEP EXPLANATION</span></li><li><span>24. TABLES & QR MODULE – DEEP EXPLANATION</span></li><li><span>25. ORDERS MODULE – DEEP EXPLANATION</span></li><li><span>26. PAYMENT FLOW (RAZORPAY)</span></li><li><span>27. NOTIFICATIONS SYSTEM</span></li><li><span>28. FILE STRUCTURE EXPLANATION</span></li><li><span>29. FOLDER-BY-FOLDER CODE EXPLANATION</span></li><li><span>30. IMPORTANT CODE SNIPPETS WITH MEANING</span></li><li><span>31. TESTING & RESULTS</span></li><li><span>32. PROBLEMS FACED AND FIXES</span></li><li><span>33. ADVANTAGES</span></li><li><span>34. LIMITATIONS</span></li><li><span>35. FUTURE SCOPE</span></li><li><span>36. VIVA QUESTIONS & ANSWERS</span></li><li><span>37. CONCLUSION</span></li></ul></section>
+  <div class="main-content"><h2>Restaurant / Hotel Order Management System</h2>
+<h3>A Diploma Project Report</h3>
+<hr>
+<p><strong>Submitted in partial fulfilment of the requirements for the award of</strong></p>
+<p><strong>Diploma in [Your Branch Name]</strong></p>
+<hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Submitted By</strong></td>
+<td>[Your Full Name]</td>
+</tr>
+<tr>
+<td><strong>Enrollment No.</strong></td>
+<td>[Your Roll Number]</td>
+</tr>
+<tr>
+<td><strong>Department</strong></td>
+<td>[Computer Science / IT / etc.]</td>
+</tr>
+<tr>
+<td><strong>Institute</strong></td>
+<td>[Your College Name]</td>
+</tr>
+<tr>
+<td><strong>Academic Year</strong></td>
+<td>2025–2026</td>
+</tr>
+<tr>
+<td><strong>Guide Name</strong></td>
+<td>[Guide Name]</td>
+</tr>
+<tr>
+<td><strong>Project Title</strong></td>
+<td>Rasops – Multi-Hotel Restaurant Order Management System</td>
+</tr>
+</tbody></table>
+<hr>
+<div style="page-break-after: always;"></motion>
+
+<h2>CERTIFICATE</h2>
+<p>This is to certify that the project report entitled <strong>“Rasops – Restaurant / Hotel Order Management System”</strong> submitted by <strong>[Student Name]</strong> bearing enrollment number <strong>[Roll No.]</strong> is a bonafide record of work carried out by him/her under my supervision and guidance.</p>
+<p>The matter embodied in this report has not been submitted earlier for the award of any degree or diploma.</p>
+<p><br><br></p>
+<p><strong>Guide</strong><br>Name: _______________________<br>Designation: __________________<br>Signature: ___________________<br>Date: _______________________</p>
+<br>
+
+<p><strong>Head of Department</strong><br>Name: _______________________<br>Signature: ___________________<br>Date: _______________________</p>
+<div style="page-break-after: always;"></div>
+
+<h2>ACKNOWLEDGEMENT</h2>
+<p>I would like to express my sincere gratitude to everyone who supported me during the development of the <strong>Rasops</strong> project.</p>
+<p>I am deeply thankful to my project guide <strong>[Guide Name]</strong> for valuable suggestions, regular reviews, and encouragement throughout the development lifecycle.</p>
+<p>I thank the <strong>Head of Department</strong> and all faculty members of <strong>[Department Name]</strong> for providing laboratory facilities and academic guidance.</p>
+<p>I am grateful to my family and friends for their continuous motivation.</p>
+<p>Finally, I acknowledge the open-source community behind <strong>React</strong>, <strong>Node.js</strong>, <strong>Express</strong>, <strong>MySQL</strong>, and <strong>Razorpay</strong>, whose tools made this project possible.</p>
+<br>
+
+<p><strong>[Your Name]</strong></p>
+<div style="page-break-after: always;"></motion>
+
+<h2>1. ABSTRACT</h2>
+<p><strong>Rasops</strong> is a web-based <strong>restaurant and hotel order management system</strong> designed to digitize dine-in operations. The system supports <strong>two primary user roles—Owner and Manager—and a public Customer interface</strong> that does not require login.</p>
+<p>Owners can register multiple hotels (up to ten per account), invite managers via email, assign managers to hotels, and manage subscriptions. Managers operate day-to-day functions: menu management, table management with <strong>QR-code-based ordering</strong>, live order tracking, payment confirmation, and analytics dashboards. Customers scan a table QR code, register basic details, browse the menu, place orders, pay online or request manual payment approval, and submit feedback.</p>
+<p>The application follows a <strong>three-tier architecture</strong>: React frontend (presentation), Node.js/Express backend (business logic and REST APIs), and MySQL database (persistent storage). <strong>JWT</strong> secures authenticated routes; <strong>Razorpay</strong> handles subscriptions and customer payments; <strong>Web Push</strong> and service workers support real-time notifications.</p>
+<p>Development-mode enhancements allow local testing without email verification. The project demonstrates practical skills in full-stack development, role-based access control, payment gateway integration, and real-world workflow automation suitable for diploma-level evaluation.</p>
+<p><strong>Keywords:</strong> Restaurant Management, QR Ordering, React, Node.js, Express, MySQL, JWT, Razorpay, Role-Based Access Control.</p>
+<hr>
+<h2>2. INTRODUCTION</h2>
+<p>The hospitality industry increasingly depends on digital tools to reduce manual errors, speed up service, and improve customer experience. Traditional paper menus and verbal order-taking are slow, error-prone, and difficult to track.</p>
+<p><strong>Rasops</strong> (Restaurant Operations System) addresses these challenges by providing a unified platform where:</p>
+<ul>
+<li>Hotel owners manage multiple properties from one account.</li>
+<li>Managers run operations for a selected hotel.</li>
+<li>Customers order food directly from their smartphones using QR codes placed on tables.</li>
+</ul>
+<p>The project is implemented as a <strong>Single Page Application (SPA)</strong> using React on the client and a RESTful API server using Node.js and Express. Data is stored in a relational MySQL database accessed through Sequelize ORM.</p>
+<p>This report documents the complete system—from problem definition and design to implementation, testing, limitations, and future improvements—in a format suitable for diploma submission and viva voce examination.</p>
+<hr>
+<h2>3. PROBLEM STATEMENT</h2>
+<p>In many small and medium restaurants:</p>
+<ol>
+<li><strong>Manual ordering</strong> leads to miscommunication between customer, waiter, and kitchen.  </li>
+<li><strong>No centralized record</strong> of orders, revenue, or table occupancy exists.  </li>
+<li><strong>Multiple hotels</strong> under one owner are difficult to monitor without separate tools.  </li>
+<li><strong>Staff access control</strong> is weak—everyone cannot safely share one login.  </li>
+<li><strong>Payment tracking</strong> is inconsistent between cash, UPI, and card.  </li>
+<li><strong>Customer experience</strong> lacks modern contactless ordering options (especially post-COVID expectations).</li>
+</ol>
+<p>There is a need for an affordable, customizable, web-based system that supports <strong>multi-hotel management</strong>, <strong>role-based staff access</strong>, <strong>QR-based customer ordering</strong>, and <strong>online payment integration</strong>.</p>
+<hr>
+<h2>4. OBJECTIVES</h2>
+<h3>4.1 Primary Objectives</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Objective</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Design and develop a web application for hotel/restaurant order management</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Implement secure user authentication with Owner and Manager roles</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Enable multi-hotel creation and manager assignment per hotel</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Provide QR-code-based customer ordering without customer login</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Integrate Razorpay for subscription and customer payments</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Store all transactional data in MySQL with proper relationships</td>
+</tr>
+</tbody></table>
+<h3>4.2 Secondary Objectives</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Objective</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>Display analytics dashboard (revenue, orders, top items)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Support browser push notifications for order events</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Generate and email PDF invoices to customers</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Provide owner invite workflow for onboarding managers</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. SCOPE OF PROJECT</h2>
+<h3>5.1 In Scope</h3>
+<ul>
+<li>User registration, login, email verification (production), password reset  </li>
+<li>Owner: hotels, invites, managers, subscriptions  </li>
+<li>Manager: dashboard, menu, tables, orders, settings  </li>
+<li>Customer: QR scan → register → menu → order → pay → feedback  </li>
+<li>Razorpay: hotel subscription + customer checkout  </li>
+<li>Push notifications via service worker  </li>
+<li>Soft-delete (paranoid) on major entities</li>
+</ul>
+<h3>5.2 Out of Scope</h3>
+<ul>
+<li>Native Android/iOS apps (web-only)  </li>
+<li>Inventory / stock management  </li>
+<li>Kitchen display system (KDS) hardware integration  </li>
+<li>Multi-language UI  </li>
+<li>Advanced AI recommendations</li>
+</ul>
+<hr>
+<h2>6. EXISTING SYSTEM VS PROPOSED SYSTEM</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Existing (Manual / Traditional)</th>
+<th>Proposed (Rasops)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Order taking</td>
+<td>Waiter writes order</td>
+<td>Customer orders via QR on phone</td>
+</tr>
+<tr>
+<td>Menu updates</td>
+<td>Reprint menus</td>
+<td>Manager updates menu in app instantly</td>
+</tr>
+<tr>
+<td>Multi-branch</td>
+<td>Separate registers</td>
+<td>One owner account, multiple hotels</td>
+</tr>
+<tr>
+<td>Staff login</td>
+<td>Shared credentials</td>
+<td>Role-based Owner / Manager accounts</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Cash / manual UPI</td>
+<td>Razorpay + manual approval option</td>
+</tr>
+<tr>
+<td>Reports</td>
+<td>Manual registers</td>
+<td>Dashboard with charts</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Verbal / phone calls</td>
+<td>Browser push notifications</td>
+</tr>
+<tr>
+<td>Data backup</td>
+<td>Paper / local Excel</td>
+<td>Centralized MySQL database</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. SOFTWARE &amp; HARDWARE REQUIREMENTS</h2>
+<h3>7.1 Software Requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Operating System</td>
+<td>Windows 10/11, Linux, or macOS</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>v18 or higher recommended</td>
+</tr>
+<tr>
+<td>npm</td>
+<td>Bundled with Node.js</td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>5.7+ or 8.x (XAMPP acceptable for development)</td>
+</tr>
+<tr>
+<td>Web Browser</td>
+<td>Chrome / Edge (latest) for testing</td>
+</tr>
+<tr>
+<td>Code Editor</td>
+<td>VS Code / Cursor</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>Optional, for version control</td>
+</tr>
+</tbody></table>
+<h3>7.2 Hardware Requirements (Minimum)</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Processor</td>
+<td>Intel i3 or equivalent</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>10 GB free</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>Internet for Razorpay and email (production)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. TECHNOLOGY STACK</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Frontend UI</td>
+<td>React 18</td>
+<td>Component-based user interface</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>React Router v6</td>
+<td>Page navigation</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Redux Toolkit + Redux Saga</td>
+<td>Global state and async API calls</td>
+</tr>
+<tr>
+<td>Forms</td>
+<td>Formik + Yup</td>
+<td>Validation</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>Axios</td>
+<td>API communication</td>
+</tr>
+<tr>
+<td>UI Library</td>
+<td>React Bootstrap</td>
+<td>Layout and components</td>
+</tr>
+<tr>
+<td>Charts</td>
+<td>Recharts</td>
+<td>Dashboard graphs</td>
+</tr>
+<tr>
+<td>QR Display</td>
+<td>qrcode.react</td>
+<td>Generate table QR codes</td>
+</tr>
+<tr>
+<td>Encryption (client)</td>
+<td>crypto-js</td>
+<td>Password encryption before API</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Node.js + Express 4</td>
+<td>REST API server</td>
+</tr>
+<tr>
+<td>ORM</td>
+<td>Sequelize 6</td>
+<td>MySQL object mapping</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>MySQL</td>
+<td>Relational data storage</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>jsonwebtoken (JWT)</td>
+<td>Session tokens</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Nodemailer + Gmail SMTP</td>
+<td>Verification / invite emails</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Razorpay SDK</td>
+<td>Subscriptions and orders</td>
+</tr>
+<tr>
+<td>PDF</td>
+<td>pdf-lib</td>
+<td>Invoice generation</td>
+</tr>
+<tr>
+<td>Push</td>
+<td>web-push</td>
+<td>Browser notifications</td>
+</tr>
+<tr>
+<td>Logging</td>
+<td>Winston</td>
+<td>Server logs</td>
+</tr>
+<tr>
+<td>API Docs</td>
+<td>Swagger UI (partial)</td>
+<td>Endpoint documentation</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. FULL ARCHITECTURE DIAGRAM</h2>
+
+  <figure class="diagram">
+    <figcaption>Figure 9.1: Three-tier system architecture</figcaption>
+    <div class="arch-box">
+      <div class="tier tier-1">Presentation Tier — React SPA (Port 3000)</div>
+      <div class="arrow">▼ REST API (JSON + JWT)</div>
+      <div class="tier tier-2">Application Tier — Node.js + Express (Port 5000)</div>
+      <div class="arrow">▼ Sequelize ORM</div>
+      <div class="tier tier-3">Data Tier — MySQL Database (rasops)</div>
+      <div class="tier tier-ext">External: Gmail SMTP · Razorpay · Web Push</div>
+    </div>
+  </figure>
+
+<h3>9.1 Three-Tier Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    PRESENTATION TIER                             │
+│  React SPA (localhost:3000)                                      │
+│  Pages │ Components │ Redux │ Services │ Service Worker          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ HTTPS / HTTP REST (JSON)
+                             │ Authorization: Bearer JWT
+┌────────────────────────────▼────────────────────────────────────┐
+│                    APPLICATION TIER                              │
+│  Node.js + Express (localhost:5000)                              │
+│  Routes → Controllers → Services → Repositories                    │
+│  Middleware: CORS, JSON, JWT Auth, Owner Role Check              │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ Sequelize ORM
+┌────────────────────────────▼────────────────────────────────────┐
+│                    DATA TIER                                     │
+│  MySQL Database: rasops                                           │
+│  Tables: users, hotels, orders, menus, etc.                      │
+└─────────────────────────────────────────────────────────────────┘
+
+External Services:
+  ├── Gmail SMTP (emails)
+  ├── Razorpay API (payments)
+  └── Web Push (notifications)
+</code></pre>
+<h3>9.2 Request Flow (MVC-style)</h3>
+<pre><code>User Action → React Component → Redux Saga → Service (axios)
+    → Express Route → Controller → Service → Repository → MySQL
+    → Response JSON → Saga → Redux State → UI Update
+</code></pre>
+<hr>
+<h2>10. COMPLETE WORKING FLOW</h2>
+
+  <figure class="diagram">
+    <figcaption>Figure 10.1: End-to-end application workflow</figcaption>
+    <div class="flow-grid">
+      <div class="flow-col"><h4>Owner</h4><ol><li>Register / Login</li><li>Add Hotel</li><li>Invite Manager</li><li>Subscribe Plan</li></ol></div>
+      <div class="flow-col"><h4>Manager</h4><ol><li>Login</li><li>Menu & Tables</li><li>Generate QR</li><li>Manage Orders</li></ol></div>
+      <div class="flow-col"><h4>Customer</h4><ol><li>Scan QR</li><li>Register</li><li>Place Order</li><li>Pay & Feedback</li></ol></div>
+    </div>
+  </figure>
+
+<h3>10.1 System Startup</h3>
+<ol>
+<li>Start MySQL service.  </li>
+<li>Run backend: <code>cd order-management-be &amp;&amp; npm run dev</code> (port 5000).  </li>
+<li>Run frontend: <code>cd order-management-fe &amp;&amp; npm start</code> (port 3000).  </li>
+<li>Backend runs <code>sequelize.sync()</code> to ensure tables exist.</li>
+</ol>
+<h3>10.2 Owner Lifecycle</h3>
+<pre><code>Register → Login → Hotels (Add Hotel) → Invite Manager
+→ Manager Signs Up → Assign Manager to Hotel
+→ Subscription (Razorpay) → Check-In Hotel → View Dashboard
+</code></pre>
+<h3>10.3 Manager Lifecycle</h3>
+<pre><code>Login (with assigned hotelId) → Dashboard → Menu (categories + items)
+→ Tables (add tables, show QR) → Orders (serve / pay / complete)
+→ Settings (profile, payment onboarding)
+</code></pre>
+<h3>10.4 Customer Lifecycle</h3>
+<pre><code>Scan Table QR → /place/:token → Register (name, phone, email)
+→ Browse Menu → Add to Cart → Place Order
+→ View Status → Pay (Razorpay or manual) → Feedback
+</code></pre>
+<h3>10.5 End-to-End Diagram</h3>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph OwnerFlow
+        O1[Signup/Login] --&gt; O2[Create Hotel]
+        O2 --&gt; O3[Invite Manager]
+        O3 --&gt; O4[Assign Manager]
+        O4 --&gt; O5[Subscribe Hotel]
+    end
+
+    subgraph ManagerFlow
+        M1[Login] --&gt; M2[Setup Menu]
+        M2 --&gt; M3[Create Tables + QR]
+        M3 --&gt; M4[Monitor Orders]
+    end
+
+    subgraph CustomerFlow
+        C1[Scan QR] --&gt; C2[Register]
+        C2 --&gt; C3[Place Order]
+        C3 --&gt; C4[Payment]
+    end
+
+    O5 --&gt; M1
+    M3 --&gt; C1
+    C3 --&gt; M4
+</code></pre>
+<hr>
+<h2>11. FRONTEND EXPLANATION (SCREEN-BY-SCREEN)</h2>
+<p><strong>Figure 11.1–11.2: Login and Registration screens</strong></p>
+<p><img src="screenshots/01-login.png" alt="Figure 11.1–11.2: Login and Registration screens"></p>
+<p><img src="screenshots/02-signup.png" alt="Figure 11.1–11.2: Login and Registration screens"></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Screen</th>
+<th>Route</th>
+<th>Who</th>
+<th>Main Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Login</td>
+<td><code>/</code>, <code>/login</code></td>
+<td>All</td>
+<td>Email/password login</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Signup</td>
+<td><code>/signup</code></td>
+<td>New users</td>
+<td>Owner or invited manager registration</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Forgot Password</td>
+<td><code>/forgot-password</code></td>
+<td>All</td>
+<td>Request reset link</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Reset Password</td>
+<td><code>/reset?token=</code></td>
+<td>All</td>
+<td>Set new password from email link</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Verify User</td>
+<td><code>/verify?token=</code></td>
+<td>New users</td>
+<td>Email verification (production)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Hotels</td>
+<td><code>/hotels</code></td>
+<td>Owner</td>
+<td>CRUD hotels, subscription, check-in</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Invites</td>
+<td><code>/invites</code></td>
+<td>Owner</td>
+<td>Send and manage manager invites</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Managers</td>
+<td><code>/manager</code></td>
+<td>Owner</td>
+<td>List/update/remove managers</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Dashboard</td>
+<td><code>/dashboard</code></td>
+<td>Manager/Owner check-in</td>
+<td>Analytics and KPIs</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Menu</td>
+<td><code>/menu</code></td>
+<td>Manager</td>
+<td>Categories and menu items</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Tables</td>
+<td><code>/tables</code></td>
+<td>Manager</td>
+<td>Add/remove tables, QR URL</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Orders</td>
+<td><code>/orders</code></td>
+<td>Manager</td>
+<td>Active and completed orders</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Settings</td>
+<td><code>/settings</code></td>
+<td>Owner/Manager</td>
+<td>Profile and preferences</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Subscription</td>
+<td><code>/subscription</code></td>
+<td>Owner</td>
+<td>Razorpay hotel plans</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Order Placement</td>
+<td><code>/place/:token</code></td>
+<td>Customer</td>
+<td>Full ordering experience</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Not Found</td>
+<td><code>/404</code></td>
+<td>All</td>
+<td>Invalid URL handler</td>
+</tr>
+</tbody></table>
+<p><strong>Layout behaviour:</strong></p>
+<ul>
+<li><strong>Public layout:</strong> No sidebar; used before login.  </li>
+<li><strong>Auth layout:</strong> Navbar + Sidebar; requires <code>localStorage.token</code>.  </li>
+<li><strong>Sidebar</strong> renders page content via React <code>&lt;Outlet /&gt;</code>.</li>
+</ul>
+<hr>
+<h2>12. BACKEND EXPLANATION</h2>
+<h3>12.1 Entry Point</h3>
+<ul>
+<li><strong>File:</strong> <code>order-management-be/src/index.js</code>  </li>
+<li>Calls <code>initDb()</code> then <code>app.listen(PORT)</code>.</li>
+</ul>
+<h3>12.2 Express Configuration</h3>
+<ul>
+<li><strong>File:</strong> <code>config/express.js</code>  </li>
+<li>JSON body parser, CORS for <code>http://localhost:3000</code>, mounts <code>/api</code> routes, Swagger at <code>/api-docs</code>.</li>
+</ul>
+<h3>12.3 Layer Responsibilities</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Responsibility</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Routes</strong></td>
+<td>Map HTTP method + path</td>
+<td><code>POST /api/hotel</code></td>
+</tr>
+<tr>
+<td><strong>Controllers</strong></td>
+<td>Parse request, validate, send HTTP status</td>
+<td><code>hotel.controller.register</code></td>
+</tr>
+<tr>
+<td><strong>Services</strong></td>
+<td>Business rules</td>
+<td>Max 10 hotels per owner</td>
+</tr>
+<tr>
+<td><strong>Repositories</strong></td>
+<td>Database CRUD</td>
+<td><code>hotelRepo.save()</code></td>
+</tr>
+<tr>
+<td><strong>Models</strong></td>
+<td>Table schema</td>
+<td><code>hotel.model.js</code></td>
+</tr>
+</tbody></table>
+<h3>12.4 Middleware</h3>
+<table>
+<thead>
+<tr>
+<th>Middleware</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>authenticate</code></td>
+<td>Validates JWT; sets <code>req.user</code></td>
+</tr>
+<tr>
+<td><code>ownerAuthentication</code></td>
+<td>Allows only <code>role === &#39;OWNER&#39;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>13. DATABASE EXPLANATION WITH TABLES</h2>
+<h3>13.1 Entity Relationship (Simplified)</h3>
+<pre><code>users ──┬── preferences (1:1)
+        ├── invites (1:1 accepted user)
+        ├── hotelUserRelations (1:N)
+        ├── pushSubscriptions (1:1)
+        ├── notifications (1:1)
+        └── paymentGatewayEntities (1:1)
+
+hotels ──┬── hotelUserRelations (1:N)
+         ├── tables (1:N)
+         ├── categories (1:N)
+         ├── menus (1:N)
+         ├── customers (1:N)
+         └── subscriptions (1:1)
+
+customers ──┬── orders (1:N)
+              └── tables (1:1 active session)
+
+categories ── menus (1:N)
+menus ── orders (1:N)
+</code></pre>
+<h3>13.2 Table Descriptions</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Description</th>
+<th>Key Columns</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>users</strong></td>
+<td>Login accounts</td>
+<td>id, firstName, lastName, email, phoneNumber, password, status (ACTIVE/INACTIVE), role (OWNER/MANAGER)</td>
+</tr>
+<tr>
+<td><strong>preferences</strong></td>
+<td>User settings</td>
+<td>notification, payment, orders (ON/OFF enums)</td>
+</tr>
+<tr>
+<td><strong>invites</strong></td>
+<td>Pending manager invites</td>
+<td>email, ownerId, status, userId</td>
+</tr>
+<tr>
+<td><strong>hotels</strong></td>
+<td>Property details</td>
+<td>name, address, careNumber, openTime, closeTime</td>
+</tr>
+<tr>
+<td><strong>hotelUserRelations</strong></td>
+<td>Links users to hotels</td>
+<td>userId, hotelId</td>
+</tr>
+<tr>
+<td><strong>tables</strong></td>
+<td>Physical tables</td>
+<td>tableNumber, hotelId, customerId, status</td>
+</tr>
+<tr>
+<td><strong>categories</strong></td>
+<td>Menu sections</td>
+<td>name, hotelId, order</td>
+</tr>
+<tr>
+<td><strong>menus</strong></td>
+<td>Food items</td>
+<td>name, price, categoryId, hotelId, status</td>
+</tr>
+<tr>
+<td><strong>customers</strong></td>
+<td>Guest at table</td>
+<td>name, email, phoneNumber, hotelId, feedback, rating</td>
+</tr>
+<tr>
+<td><strong>orders</strong></td>
+<td>Order line items</td>
+<td>customerId, menuId, quantity, status, price</td>
+</tr>
+<tr>
+<td><strong>subscriptions</strong></td>
+<td>Hotel plan</td>
+<td>hotelId, planName, endDate, subscriptionId</td>
+</tr>
+<tr>
+<td><strong>paymentGatewayEntities</strong></td>
+<td>Razorpay IDs</td>
+<td>userId, accountId, productId, etc.</td>
+</tr>
+<tr>
+<td><strong>notifications</strong></td>
+<td>In-app alerts</td>
+<td>userId, title, message, read status</td>
+</tr>
+<tr>
+<td><strong>pushSubscriptions</strong></td>
+<td>Browser push keys</td>
+<td>userId, endpoint, keys</td>
+</tr>
+</tbody></table>
+<p>All major tables use <strong>paranoid delete</strong> (<code>deletedAt</code>) for soft deletion.</p>
+<hr>
+<h2>14. API FLOW EXPLANATION</h2>
+<h3>14.1 API Base URL</h3>
+<ul>
+<li>Development: <code>http://localhost:5000/api</code>  </li>
+<li>Frontend config: <code>REACT_APP_BASE_URL</code> in <code>order-management-fe/.env</code></li>
+</ul>
+<h3>14.2 Sample API Flow – Place Order</h3>
+<pre><code>1. Customer: POST /api/order/customer     → Register guest at table
+2. Customer: GET  /api/order/menu         → Fetch menu for hotel
+3. Customer: POST /api/order              → Place order items
+4. Customer: GET  /api/order/:customerId  → Poll order status
+5. Customer: POST /api/checkout/payment     → Initiate Razorpay payment
+6. Customer: POST /api/checkout/confirm     → Confirm payment webhook-style
+7. Manager:   GET  /api/order/active/:tableId → See live orders
+8. Manager:   PUT  /api/order/pending       → Mark served/cancelled
+</code></pre>
+<h3>14.3 Authenticated vs Public Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Public</strong></td>
+<td><code>/user/register</code>, <code>/user/login</code>, <code>/order/customer</code>, <code>/order/menu</code>, <code>/checkout/payment</code></td>
+</tr>
+<tr>
+<td><strong>JWT required</strong></td>
+<td><code>/hotel</code>, <code>/menu</code>, <code>/table</code>, <code>/order/active</code>, <code>/user</code> (profile)</td>
+</tr>
+<tr>
+<td><strong>Owner only</strong></td>
+<td><code>/user/invite</code>, <code>POST /hotel</code>, <code>GET /manager</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>15. AUTHENTICATION &amp; LOGIN FLOW</h2>
+<h3>15.1 Registration</h3>
+<ol>
+<li>User fills signup form (Formik + Yup).  </li>
+<li>Password encrypted with <strong>AES (crypto-js)</strong> using <code>CRYPTO_SECRET_KEY</code>.  </li>
+<li><code>POST /api/user/register</code> with encrypted password.  </li>
+<li>Backend decrypts → validates → saves user + preferences.  </li>
+<li><strong>Production:</strong> status <code>INACTIVE</code>, verification email sent.  </li>
+<li><strong>Development:</strong> status <code>ACTIVE</code>, email skipped (current project fix).</li>
+</ol>
+<h3>15.2 Login</h3>
+<ol>
+<li>Password encrypted on client.  </li>
+<li><code>POST /api/user/login</code>.  </li>
+<li>Backend finds user, decrypts stored password, compares.  </li>
+<li>Checks verification status (skipped in dev).  </li>
+<li>For managers: checks hotel subscription not expired.  </li>
+<li>Returns <strong>JWT token</strong> + encrypted role/hotel <code>data</code>.  </li>
+<li>Stored in <code>localStorage</code>; axios adds <code>Authorization</code> header.</li>
+</ol>
+<h3>15.3 Session Protection</h3>
+<ul>
+<li>No token → Auth routes redirect to <code>/</code>.  </li>
+<li>Invalid token → API returns error → localStorage cleared → redirect login.  </li>
+<li>Owner/Manager sidebars show different menu tabs.</li>
+</ul>
+<hr>
+<h2>16. FULL MODULE EXPLANATION</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Frontend Page</th>
+<th>Backend Service</th>
+<th>Primary Tables</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Auth</td>
+<td>Login, Signup, Verify, Reset</td>
+<td>user.service</td>
+<td>users, preferences</td>
+</tr>
+<tr>
+<td>Hotels</td>
+<td>Hotels</td>
+<td>hotel.service</td>
+<td>hotels, hotelUserRelations, subscriptions</td>
+</tr>
+<tr>
+<td>Invites</td>
+<td>Invites</td>
+<td>user.service (invite)</td>
+<td>invites</td>
+</tr>
+<tr>
+<td>Managers</td>
+<td>Managers</td>
+<td>manager.service</td>
+<td>users, hotelUserRelations</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Dashboard</td>
+<td>hotel.service (dashboard)</td>
+<td>orders, hotels, menus</td>
+</tr>
+<tr>
+<td>Menu</td>
+<td>Menu</td>
+<td>menu.service</td>
+<td>categories, menus</td>
+</tr>
+<tr>
+<td>Tables</td>
+<td>Tables</td>
+<td>table.service</td>
+<td>tables</td>
+</tr>
+<tr>
+<td>Orders</td>
+<td>Orders</td>
+<td>order.service</td>
+<td>orders, customers</td>
+</tr>
+<tr>
+<td>Customer Order</td>
+<td>OrderPlacement</td>
+<td>order.service</td>
+<td>customers, orders</td>
+</tr>
+<tr>
+<td>Checkout</td>
+<td>Subscription, PaymentActivation, Razorpay component</td>
+<td>checkout.service</td>
+<td>subscriptions, paymentGatewayEntities</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Navbar bell</td>
+<td>notification.service</td>
+<td>notifications, pushSubscriptions</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td>Settings</td>
+<td>user.service</td>
+<td>users, preferences</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>17. EVERY BUTTON EXPLANATION</h2>
+<h3>17.1 Login Page (<code>/</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Button / Link</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Login</strong> (submit)</td>
+<td>Encrypts password → dispatches login → stores token → redirects</td>
+</tr>
+<tr>
+<td><strong>Sign Up</strong></td>
+<td>Navigates to <code>/signup</code></td>
+</tr>
+<tr>
+<td><strong>Forgot your password?</strong></td>
+<td>Navigates to <code>/forgot-password</code></td>
+</tr>
+</tbody></table>
+<h3>17.2 Signup Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button / Link</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Submit</strong></td>
+<td>Registers user; dev mode: immediate ACTIVE</td>
+</tr>
+<tr>
+<td><strong>Login</strong> (link)</td>
+<td>Navigates to <code>/</code></td>
+</tr>
+</tbody></table>
+<h3>17.3 Hotels Page (Owner)</h3>
+<table>
+<thead>
+<tr>
+<th>Button / Control</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Add Hotel</strong> (+)</td>
+<td>Opens modal with empty hotel form; loads assignable managers</td>
+</tr>
+<tr>
+<td><strong>Create / Update</strong> (modal)</td>
+<td>Submits hotel to API</td>
+</tr>
+<tr>
+<td><strong>Close</strong> (modal)</td>
+<td>Closes form without save</td>
+</tr>
+<tr>
+<td><strong>Check-In</strong> (row menu)</td>
+<td>Sets selected hotel in localStorage; opens Dashboard if subscription valid</td>
+</tr>
+<tr>
+<td><strong>Subscription</strong> (row menu)</td>
+<td>Opens <code>/subscription</code> for that hotel</td>
+</tr>
+<tr>
+<td><strong>Edit</strong> (row menu)</td>
+<td>Opens modal with hotel data pre-filled</td>
+</tr>
+<tr>
+<td><strong>Delete</strong> (row menu)</td>
+<td>Opens confirmation modal → deletes hotel</td>
+</tr>
+</tbody></table>
+<h3>17.4 Invites Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Send Invite</strong></td>
+<td>POST invite email to entered address</td>
+</tr>
+<tr>
+<td><strong>Delete</strong> (row)</td>
+<td>Removes pending invite after confirmation</td>
+</tr>
+</tbody></table>
+<h3>17.5 Managers Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Edit</strong> (row)</td>
+<td>Opens modal to change assigned hotel</td>
+</tr>
+<tr>
+<td><strong>Delete</strong> (row)</td>
+<td>Removes manager assignment / manager record</td>
+</tr>
+<tr>
+<td><strong>Update</strong> (modal)</td>
+<td>Saves hotel assignment changes</td>
+</tr>
+</tbody></table>
+<h3>17.6 Dashboard Page</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>(No action buttons)</em></td>
+<td>Auto-loads stats when <code>globalHotelId</code> is set; displays KPI cards and charts</td>
+</tr>
+</tbody></table>
+<h3>17.7 Menu Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Add Category</strong></td>
+<td>Modal to create menu category</td>
+</tr>
+<tr>
+<td><strong>Add Menu Item</strong></td>
+<td>Modal to add dish under selected category</td>
+</tr>
+<tr>
+<td><strong>Edit Category / Item</strong></td>
+<td>Pre-filled update modal</td>
+</tr>
+<tr>
+<td><strong>Delete Category / Item</strong></td>
+<td>Removes selected records</td>
+</tr>
+<tr>
+<td><strong>Category selector</strong></td>
+<td>Filters menu items list</td>
+</tr>
+</tbody></table>
+<h3>17.8 Tables Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Table dropdown</strong></td>
+<td>Select table to show QR</td>
+</tr>
+<tr>
+<td><strong>Add Tables</strong></td>
+<td>Modal: enter count → creates multiple tables</td>
+</tr>
+<tr>
+<td><strong>Remove Tables</strong></td>
+<td>Modal: enter count → removes tables</td>
+</tr>
+<tr>
+<td><strong>QR Code area</strong></td>
+<td>Displays URL for customer ordering</td>
+</tr>
+</tbody></table>
+<h3>17.9 Orders Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Table selector</strong></td>
+<td>Load active orders for table</td>
+</tr>
+<tr>
+<td><strong>Serve</strong> (order item)</td>
+<td>Marks order as SERVED</td>
+</tr>
+<tr>
+<td><strong>Cancel</strong> (order item)</td>
+<td>Marks order as CANCELLED</td>
+</tr>
+<tr>
+<td><strong>Approve</strong> (payment modal)</td>
+<td>Confirms manual customer payment</td>
+</tr>
+<tr>
+<td><strong>Completed orders table</strong></td>
+<td>Pagination, sort, filter</td>
+</tr>
+</tbody></table>
+<h3>17.10 Settings Page</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Edit icon (pencil)</strong></td>
+<td>Opens profile update modal</td>
+</tr>
+<tr>
+<td><strong>Activate Payment</strong></td>
+<td>Opens 3-step Razorpay onboarding wizard</td>
+</tr>
+<tr>
+<td><strong>Update</strong> (modal)</td>
+<td>Saves name/password/preferences</td>
+</tr>
+</tbody></table>
+<h3>17.11 Customer Order Page (<code>/place/:token</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Register / Submit</strong></td>
+<td>Creates customer session for table</td>
+</tr>
+<tr>
+<td><strong>Add to cart</strong></td>
+<td>Adds menu item</td>
+</tr>
+<tr>
+<td><strong>Place Order</strong></td>
+<td>Submits order to kitchen</td>
+</tr>
+<tr>
+<td><strong>Pay Now</strong></td>
+<td>Opens Razorpay checkout</td>
+</tr>
+<tr>
+<td><strong>Submit Feedback</strong></td>
+<td>Sends rating and comment</td>
+</tr>
+</tbody></table>
+<h3>17.12 Navbar (Global)</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Notification bell</strong></td>
+<td>Shows notification list</td>
+</tr>
+<tr>
+<td><strong>Logout</strong></td>
+<td>Clears session, unsubscribes push</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>18. HOTELS MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 18.1: Hotels management screen (Owner)</strong></p>
+<p><img src="screenshots/03-hotels.png" alt="Figure 18.1: Hotels management screen (Owner)"></p>
+<h3>18.1 Purpose</h3>
+<p>Allows the <strong>Owner</strong> to create and manage hotel properties, link managers, purchase subscriptions, and enter “manager view” for a selected hotel.</p>
+<h3>18.2 Frontend Files</h3>
+<ul>
+<li><code>pages/Hotels/index.jsx</code>  </li>
+<li><code>store/slice/hotel.slice.js</code>  </li>
+<li><code>store/sagas/hotel.saga.js</code>  </li>
+<li><code>services/hotel.service.js</code>  </li>
+<li><code>validations/hotel.js</code></li>
+</ul>
+<h3>18.3 Add Hotel – Step by Step</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Layer</th>
+<th>What Happens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>UI</td>
+<td>Click <strong>Add Hotel</strong> → <code>setHotelFormData(createOptions)</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>UI</td>
+<td>Modal opens; <code>getAssignableManagerRequest()</code> loads managers</td>
+</tr>
+<tr>
+<td>3</td>
+<td>UI</td>
+<td>User submits form → <code>createHotelRequest(payload)</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Saga</td>
+<td><code>POST /api/hotel</code> with JWT</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Controller</td>
+<td><code>registerationValidation(body)</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Service</td>
+<td>Check owner has &lt; 10 hotels</td>
+</tr>
+<tr>
+<td>7</td>
+<td>DB</td>
+<td>Insert into <code>hotels</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>DB</td>
+<td>Insert <code>hotelUserRelations</code> for owner + selected managers</td>
+</tr>
+<tr>
+<td>9</td>
+<td>UI</td>
+<td>Toast success; refresh hotel list</td>
+</tr>
+</tbody></table>
+<h3>18.4 Business Rules</h3>
+<ul>
+<li>Maximum <strong>10 hotels</strong> per owner.  </li>
+<li>Subscription required for <strong>Check-In</strong> to dashboard (valid <code>endDate</code>).  </li>
+<li>Deleting hotel removes associated data (soft delete where implemented).</li>
+</ul>
+<hr>
+<h2>19. INVITES MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 19.1: Manager invite screen</strong></p>
+<p><img src="screenshots/04-invites.png" alt="Figure 19.1: Manager invite screen"></p>
+<h3>19.1 Purpose</h3>
+<p>Owner invites a person by email to join as <strong>Manager</strong>.</p>
+<h3>19.2 Flow</h3>
+<ol>
+<li>Owner enters email on Invites page → <strong>Send Invite</strong>.  </li>
+<li>Backend creates row in <code>invites</code> (status PENDING).  </li>
+<li>Email sent with link: <code>/signup?token=&lt;encrypted&gt;</code> containing email, inviteId, expiry.  </li>
+<li>Invitee opens link → Signup form pre-fills email (disabled field).  </li>
+<li>On register, <code>invite</code> id sent → backend marks invite ACCEPTED and sets role MANAGER.</li>
+</ol>
+<h3>19.3 API Endpoints</h3>
+<ul>
+<li><code>POST /api/user/invite</code>  </li>
+<li><code>GET /api/user/invite</code> (paginated list)  </li>
+<li><code>DELETE /api/user/invite/:id</code></li>
+</ul>
+<hr>
+<h2>20. MANAGERS MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 20.1: Managers assignment screen</strong></p>
+<p><img src="screenshots/05-managers.png" alt="Figure 20.1: Managers assignment screen"></p>
+<h3>20.1 Purpose</h3>
+<p>View all registered managers, assign them to a hotel, update assignment, or remove.</p>
+<h3>20.2 Key Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>API</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>List</td>
+<td><code>GET /api/manager</code></td>
+<td>Returns managers with hotel info</td>
+</tr>
+<tr>
+<td>Update</td>
+<td><code>PUT /api/manager/:id</code></td>
+<td>Changes <code>hotelUserRelations</code></td>
+</tr>
+<tr>
+<td>Remove</td>
+<td><code>DELETE /api/manager/:id</code></td>
+<td>Removes manager link</td>
+</tr>
+<tr>
+<td>Assignable</td>
+<td><code>GET /api/manager/assignable</code></td>
+<td>Managers not yet on a hotel (for hotel form dropdown)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>21. SETTINGS MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 21.1: Settings screen</strong></p>
+<p><img src="screenshots/10-settings.png" alt="Figure 21.1: Settings screen"></p>
+<h3>21.1 Profile Section</h3>
+<p>Displays: Rasops ID, name, email, phone, role.</p>
+<h3>21.2 Update Modal</h3>
+<ul>
+<li>Edit first/last name  </li>
+<li>Optional new password (encrypted)  </li>
+<li>Toggle <strong>notification</strong> preference (ON/OFF)  </li>
+<li>Toggle <strong>payment</strong> preference for customer online pay (ON/OFF)  </li>
+<li>Toggle <strong>orders</strong> preference (manager orders page auto-enable)</li>
+</ul>
+<h3>21.3 Payment Activation Wizard</h3>
+<p>Embedded <code>PaymentActivation</code> page (3 steps):</p>
+<ol>
+<li><strong>Business details</strong> – legal name, PAN, GST, address → <code>POST /checkout/business</code>  </li>
+<li><strong>Stakeholder details</strong> – director info → <code>POST /checkout/stakeholder</code>  </li>
+<li><strong>Bank account</strong> – IFSC, account number → <code>POST /checkout/account</code></li>
+</ol>
+<p>Creates Razorpay linked account for receiving customer payments.</p>
+<hr>
+<h2>22. DASHBOARD MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 22.1: Analytics dashboard</strong></p>
+<p><img src="screenshots/06-dashboard.png" alt="Figure 22.1: Analytics dashboard"></p>
+<h3>22.1 Purpose</h3>
+<p>Visual summary of hotel performance for selected <code>globalHotelId</code>.</p>
+<h3>22.2 Data Displayed</h3>
+<table>
+<thead>
+<tr>
+<th>Card / Chart</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Total Orders</td>
+<td>Count of orders</td>
+</tr>
+<tr>
+<td>Managers</td>
+<td>Managers linked to hotel</td>
+</tr>
+<tr>
+<td>Tables</td>
+<td>Table count</td>
+</tr>
+<tr>
+<td>Sale / Revenue</td>
+<td>Financial totals</td>
+</tr>
+<tr>
+<td>Menu Items</td>
+<td>Active dishes</td>
+</tr>
+<tr>
+<td>Today / Week / Year revenue</td>
+<td>Time-based income</td>
+</tr>
+<tr>
+<td>Bar / Line / Pie charts</td>
+<td>Revenue trends and top 5 items</td>
+</tr>
+</tbody></table>
+<h3>22.3 API</h3>
+<ul>
+<li><code>GET /api/hotel/dashboard/:hotelId</code>  </li>
+<li>Requires authentication; aggregates from orders, menus, tables.</li>
+</ul>
+<hr>
+<h2>23. MENU MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 23.1: Menu management screen</strong></p>
+<p><img src="screenshots/07-menu.png" alt="Figure 23.1: Menu management screen"></p>
+<h3>23.1 Structure</h3>
+<p>Two-level menu:</p>
+<ol>
+<li><strong>Categories</strong> (e.g., Starters, Main Course)  </li>
+<li><strong>Menu Items</strong> (dishes with price, availability status)</li>
+</ol>
+<h3>23.2 Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>API</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Create category</td>
+<td><code>POST /api/menu/category</code></td>
+</tr>
+<tr>
+<td>List categories</td>
+<td><code>GET /api/menu/category/:hotelId</code></td>
+</tr>
+<tr>
+<td>Create item</td>
+<td><code>POST /api/menu</code></td>
+</tr>
+<tr>
+<td>List items</td>
+<td><code>GET /api/menu/:categoryId</code></td>
+</tr>
+<tr>
+<td>Update / Delete</td>
+<td><code>PUT</code> / <code>DELETE</code> endpoints</td>
+</tr>
+</tbody></table>
+<p>Validation prevents duplicate category names and duplicate item names within category.</p>
+<hr>
+<h2>24. TABLES &amp; QR MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 24.1: Tables and QR code screen</strong></p>
+<p><img src="screenshots/08-tables.png" alt="Figure 24.1: Tables and QR code screen"></p>
+<h3>24.1 Purpose</h3>
+<p>Represent physical restaurant tables and generate customer ordering URLs.</p>
+<h3>24.2 QR Generation Logic</h3>
+<pre><code class="language-javascript">// Conceptual flow (Tables page)
+token = AES.encrypt({ tableId }, CRYPTO_SECRET)
+URL = APP_URL + &quot;/place/&quot; + encodeURIComponent(token)
+// QRCodeSVG renders URL
+</code></pre>
+<h3>24.3 Table Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>API</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Add tables</td>
+<td><code>POST /api/table/:hotelId</code></td>
+<td>Body: <code>{ count: N }</code></td>
+</tr>
+<tr>
+<td>List tables</td>
+<td><code>GET /api/table/:hotelId</code></td>
+<td>Optional filter</td>
+</tr>
+<tr>
+<td>Remove tables</td>
+<td><code>DELETE /api/table/:hotelId</code></td>
+<td>Removes by count</td>
+</tr>
+</tbody></table>
+<p>When customer opens URL, backend resolves table → hotel → menu.</p>
+<hr>
+<h2>25. ORDERS MODULE – DEEP EXPLANATION</h2>
+<p><strong>Figure 25.1: Orders management screen</strong></p>
+<p><img src="screenshots/09-orders.png" alt="Figure 25.1: Orders management screen"></p>
+<h3>25.1 Active Orders</h3>
+<ul>
+<li>Manager selects table.  </li>
+<li><code>GET /api/order/active/:tableId</code> returns pending items.  </li>
+<li>Buttons: <strong>Serve</strong> / <strong>Cancel</strong> → <code>PUT /api/order/pending</code>.</li>
+</ul>
+<h3>25.2 Completed Orders</h3>
+<ul>
+<li>Paginated table of past customers with feedback, rating, bill.  </li>
+<li><code>GET /api/order/completed/:hotelId</code>.</li>
+</ul>
+<h3>25.3 Payment Request Handling</h3>
+<p>When customer requests manual payment, service worker message opens modal; manager clicks <strong>Approve</strong> → <code>POST /api/checkout/confirm</code>.</p>
+<h3>25.4 Order Status Values</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PENDING</td>
+<td>Kitchen / service pending</td>
+</tr>
+<tr>
+<td>SERVED</td>
+<td>Delivered to customer</td>
+</tr>
+<tr>
+<td>CANCELLED</td>
+<td>Order cancelled</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>26. PAYMENT FLOW (RAZORPAY)</h2>
+<h3>26.1 Hotel Subscription (Owner)</h3>
+<ol>
+<li>Owner opens Subscription page from Hotels.  </li>
+<li>Selects monthly/yearly plan.  </li>
+<li><code>POST /api/checkout/subscribe</code> creates Razorpay subscription.  </li>
+<li>Frontend Razorpay checkout opens.  </li>
+<li><code>POST /api/checkout/success</code> records subscription in <code>subscriptions</code> table.</li>
+</ol>
+<h3>26.2 Customer Order Payment</h3>
+<ol>
+<li>Customer places order.  </li>
+<li>If payment preference ON → <code>POST /api/checkout/payment</code>.  </li>
+<li>Razorpay order created; customer pays.  </li>
+<li><code>POST /api/checkout/confirm</code> verifies signature and marks paid.  </li>
+<li>Invoice PDF emailed via <code>email.service</code>.</li>
+</ol>
+<h3>26.3 Manual Payment</h3>
+<ul>
+<li>Customer requests payment approval.  </li>
+<li>Manager receives notification → approves in Orders module.</li>
+</ul>
+<hr>
+<h2>27. NOTIFICATIONS SYSTEM</h2>
+<h3>27.1 Components</h3>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Service Worker</td>
+<td><code>public/serviceWorker.js</code></td>
+</tr>
+<tr>
+<td>Push API</td>
+<td>web-push (backend)</td>
+</tr>
+<tr>
+<td>In-app list</td>
+<td><code>notifications</code> table + Navbar UI</td>
+</tr>
+</tbody></table>
+<h3>27.2 Notification Actions</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CUSTOMER_REGISTERATION</td>
+<td>Guest registers at table</td>
+</tr>
+<tr>
+<td>ORDER_PLACEMENT</td>
+<td>New order placed</td>
+</tr>
+<tr>
+<td>ORDER_SERVED</td>
+<td>Item served</td>
+</tr>
+<tr>
+<td>PAYMENT_REQUEST</td>
+<td>Customer wants manual pay approval</td>
+</tr>
+<tr>
+<td>ONLINE_PAYMENT_CONFIRMED</td>
+<td>Razorpay success</td>
+</tr>
+</tbody></table>
+<h3>27.3 Known Issue</h3>
+<p><code>initNotifications()</code> is <strong>commented out</strong> in <code>index.js</code>—VAPID keys may not initialize on server start; push may fail until enabled.</p>
+<hr>
+<h2>28. FILE STRUCTURE EXPLANATION</h2>
+<pre><code>Rasops-bug-fixes/
+├── README.md
+├── RASOPS_DIPLOMA_PROJECT_REPORT.md    ← This document
+├── order-management-fe/                 ← React frontend
+└── order-management-be/                 ← Node backend
+</code></pre>
+<hr>
+<h2>29. FOLDER-BY-FOLDER CODE EXPLANATION</h2>
+<h3>29.1 Frontend (<code>order-management-fe/src</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>api/</code></td>
+<td>Axios instance, request/response interceptors, JWT attachment</td>
+</tr>
+<tr>
+<td><code>assets/styles/</code></td>
+<td>CSS for pages (login, menu, orders, etc.)</td>
+</tr>
+<tr>
+<td><code>components/</code></td>
+<td>Reusable UI: Sidebar, Table, Modal, Charts, MenuCard</td>
+</tr>
+<tr>
+<td><code>config/</code></td>
+<td>Frontend environment variables</td>
+</tr>
+<tr>
+<td><code>pages/</code></td>
+<td>Full-screen views mapped to routes</td>
+</tr>
+<tr>
+<td><code>routes/</code></td>
+<td>PublicRoutes vs AuthRoutes split</td>
+</tr>
+<tr>
+<td><code>services/</code></td>
+<td>One function per API call</td>
+</tr>
+<tr>
+<td><code>store/slice/</code></td>
+<td>Redux state reducers</td>
+</tr>
+<tr>
+<td><code>store/sagas/</code></td>
+<td>Async workflows calling services</td>
+</tr>
+<tr>
+<td><code>store/types/</code></td>
+<td>Action name constants</td>
+</tr>
+<tr>
+<td><code>utils/</code></td>
+<td>Role tabs, order status constants, helpers</td>
+</tr>
+<tr>
+<td><code>validations/</code></td>
+<td>Yup schemas for forms</td>
+</tr>
+</tbody></table>
+<h3>29.2 Backend (<code>order-management-be/src</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>config/</code></td>
+<td>Database, Express, email, env, logger</td>
+</tr>
+<tr>
+<td><code>api/routes/</code></td>
+<td>Express routers per domain</td>
+</tr>
+<tr>
+<td><code>api/controllers/</code></td>
+<td>HTTP request handlers</td>
+</tr>
+<tr>
+<td><code>api/services/</code></td>
+<td>Business logic</td>
+</tr>
+<tr>
+<td><code>api/repositories/</code></td>
+<td>Sequelize queries</td>
+</tr>
+<tr>
+<td><code>api/models/</code></td>
+<td>Table definitions + associations</td>
+</tr>
+<tr>
+<td><code>api/middlewares/</code></td>
+<td>JWT and role checks</td>
+</tr>
+<tr>
+<td><code>api/validations/</code></td>
+<td>Joi schemas</td>
+</tr>
+<tr>
+<td><code>api/templates/</code></td>
+<td>HTML email templates</td>
+</tr>
+<tr>
+<td><code>api/tests/</code></td>
+<td>Jest unit tests</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>30. IMPORTANT CODE SNIPPETS WITH MEANING</h2>
+<h3>30.1 JWT Middleware (Backend)</h3>
+<pre><code class="language-javascript">// api/middlewares/auth.js (concept)
+const token = req.headers.authorization?.split(&#39; &#39;)[1];
+const decoded = jwt.verify(token, env.jwtSecret);
+req.user = decoded;  // { id, role, firstName, ... }
+</code></pre>
+<p><strong>Meaning:</strong> Every protected API knows who is calling.</p>
+<h3>30.2 Password Encryption (Frontend)</h3>
+<pre><code class="language-javascript">const enpass = CryptoJS.AES.encrypt(values.password, env.cryptoSecret).toString();
+</code></pre>
+<p><strong>Meaning:</strong> Plain password never sent over network; backend decrypts with same secret.</p>
+<h3>30.3 Redux Saga Pattern</h3>
+<pre><code class="language-javascript">function* createHotelRequestSaga(action) {
+    yield service.create(action.payload);
+    yield put(getHotelRequest());  // refresh list
+}
+</code></pre>
+<p><strong>Meaning:</strong> UI dispatches action → saga calls API → updates store → UI re-renders.</p>
+<h3>30.4 Hotel Creation (Backend)</h3>
+<pre><code class="language-javascript">const hotel = { id: uuidv4(), name, address, ... };
+await hotelRepo.save(hotel);
+await hotelUserRelationRepo.save([{ userId: ownerId, hotelId: hotel.id }]);
+</code></pre>
+<p><strong>Meaning:</strong> Hotel record plus owner link created together.</p>
+<hr>
+<h2>31. TESTING &amp; RESULTS</h2>
+<h3>31.1 Backend Unit Tests (Jest)</h3>
+<table>
+<thead>
+<tr>
+<th>Test File</th>
+<th>Coverage Area</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>auth.test.js</code></td>
+<td>Register validation, login, verify, reset</td>
+</tr>
+<tr>
+<td><code>hotel.test.js</code></td>
+<td>Hotel create/update/list</td>
+</tr>
+<tr>
+<td><code>invite.test.js</code></td>
+<td>Invite CRUD</td>
+</tr>
+</tbody></table>
+<p><strong>Run command:</strong> <code>cd order-management-be &amp;&amp; npm test</code></p>
+<h3>31.2 Manual Testing Performed</h3>
+<table>
+<thead>
+<tr>
+<th>Test Case</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>User registration (dev)</td>
+<td>ACTIVE user, no email block</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Login without verification (dev)</td>
+<td>JWT returned</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Add hotel</td>
+<td>Hotel in list</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>API register + login curl</td>
+<td>201 + 200</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Email send (no SMTP)</td>
+<td>Registration still succeeds (dev)</td>
+<td>Pass</td>
+</tr>
+</tbody></table>
+<h3>31.3 Frontend Tests</h3>
+<ul>
+<li><code>signup.test.js</code>, <code>login.test.js</code> exist under <code>src/tests/</code> (React Testing Library).</li>
+</ul>
+<hr>
+<h2>32. PROBLEMS FACED AND FIXES</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Problem</th>
+<th>Cause</th>
+<th>Fix Applied</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Signup failed after submit</td>
+<td>Email SMTP failed after DB insert; retry caused duplicate email</td>
+<td>Transaction + dev email skip; resend logic for unverified users</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Login “Email not verified” in dev</td>
+<td>Users created as INACTIVE</td>
+<td>Dev mode: ACTIVE on register; auto-activate on login</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Backend not starting</td>
+<td>MySQL not running</td>
+<td>Start XAMPP/MySQL service</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>EADDRINUSE</code> port 5000</td>
+<td>Old node process running</td>
+<td>Kill process on port 5000</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Password validation failed</td>
+<td>Crypto key mismatch FE/BE</td>
+<td>Same <code>CRYPTO_SECRET_KEY</code> in both <code>.env</code> files</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Push notifications not working</td>
+<td><code>initNotifications()</code> commented</td>
+<td>Documented; enable for production</td>
+</tr>
+<tr>
+<td>7</td>
+<td>PowerShell <code>&amp;&amp;</code> error</td>
+<td>PS version syntax</td>
+<td>Use <code>;</code> instead of <code>&amp;&amp;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>33. ADVANTAGES</h2>
+<ol>
+<li><strong>Contactless ordering</strong> via QR codes.  </li>
+<li><strong>Multi-hotel</strong> management from one owner account.  </li>
+<li><strong>Role separation</strong> improves security vs shared login.  </li>
+<li><strong>Real-time orders</strong> reduce communication delay.  </li>
+<li><strong>Integrated payments</strong> via Razorpay.  </li>
+<li><strong>Analytics dashboard</strong> supports business decisions.  </li>
+<li><strong>Modern stack</strong> (React + Node) is industry-relevant.  </li>
+<li><strong>Scalable architecture</strong> (API can serve mobile apps later).</li>
+</ol>
+<hr>
+<h2>34. LIMITATIONS</h2>
+<ol>
+<li>Requires <strong>internet</strong> and running MySQL server.  </li>
+<li><strong>Email</strong> depends on Gmail SMTP configuration.  </li>
+<li><strong>Razorpay</strong> needs valid API keys for real payments.  </li>
+<li><strong>CORS</strong> hardcoded to localhost:3000 only.  </li>
+<li><strong>Swagger</strong> documents only subset of APIs.  </li>
+<li><strong>No native mobile app</strong>.  </li>
+<li><strong>sequelize.sync</strong> on startup not ideal for production migrations.  </li>
+<li>Some <strong>notification preference</strong> code paths have naming bugs.  </li>
+<li>Manager can access some routes without strict manager-only middleware.  </li>
+<li>Maximum <strong>10 hotels</strong> per owner (by design).</li>
+</ol>
+<hr>
+<h2>35. FUTURE SCOPE</h2>
+<ol>
+<li>Native <strong>Android/iOS</strong> apps using same REST API.  </li>
+<li><strong>Kitchen Display System</strong> screen for chefs.  </li>
+<li><strong>Inventory management</strong> linked to menu items.  </li>
+<li><strong>Multi-language</strong> menu support.  </li>
+<li><strong>WhatsApp/SMS</strong> order notifications.  </li>
+<li><strong>Docker</strong> deployment and cloud hosting (AWS/Azure).  </li>
+<li><strong>Proper migrations</strong> (Sequelize CLI) instead of sync.  </li>
+<li><strong>Admin super-user</strong> panel for platform owner.  </li>
+<li><strong>Table reservation</strong> booking module.  </li>
+<li><strong>AI-based</strong> sales forecasting on dashboard data.</li>
+</ol>
+<hr>
+<h2>36. VIVA QUESTIONS &amp; ANSWERS</h2>
+<p><strong>Q1. What is Rasops?</strong><br><strong>A:</strong> Rasops is a web-based restaurant/hotel management system for owners, managers, and customers using QR-based ordering.</p>
+<p><strong>Q2. Which architecture is used?</strong><br><strong>A:</strong> Three-tier: React (presentation), Node/Express (application), MySQL (data).</p>
+<p><strong>Q3. What is JWT?</strong><br><strong>A:</strong> JSON Web Token—a signed string stored after login used to authenticate API requests.</p>
+<p><strong>Q4. Why encrypt password on frontend?</strong><br><strong>A:</strong> To avoid sending plain text over HTTP; backend decrypts with shared secret before hashing/storage.</p>
+<p><strong>Q5. Difference between Owner and Manager?</strong><br><strong>A:</strong> Owner manages hotels, invites, subscriptions. Manager runs menu, tables, orders for assigned hotel.</p>
+<p><strong>Q6. How does QR ordering work?</strong><br><strong>A:</strong> Table ID is encrypted into URL; customer opens <code>/place/token</code>, registers, and orders without login.</p>
+<p><strong>Q7. Which database tables store orders?</strong><br><strong>A:</strong> <code>orders</code> table linked to <code>customers</code> and <code>menus</code>.</p>
+<p><strong>Q8. What is Sequelize?</strong><br><strong>A:</strong> ORM that maps JavaScript objects to MySQL tables.</p>
+<p><strong>Q9. What is Redux Saga?</strong><br><strong>A:</strong> Middleware that handles async operations (API calls) in response to Redux actions.</p>
+<p><strong>Q10. How is Razorpay integrated?</strong><br><strong>A:</strong> Backend creates Razorpay orders/subscriptions; frontend opens checkout; confirm endpoint verifies payment.</p>
+<p><strong>Q11. What happens when Add Hotel is clicked?</strong><br><strong>A:</strong> Modal opens → form submit → POST /api/hotel → hotel + owner relation saved in MySQL.</p>
+<p><strong>Q12. What is CORS?</strong><br><strong>A:</strong> Cross-Origin Resource Sharing—browser security; backend allows frontend origin to call APIs.</p>
+<p><strong>Q13. What are order statuses?</strong><br><strong>A:</strong> PENDING, SERVED, CANCELLED.</p>
+<p><strong>Q14. Why MySQL over MongoDB here?</strong><br><strong>A:</strong> Relational data (users, hotels, orders) fits tables and foreign keys naturally.</p>
+<p><strong>Q15. What was the signup bug you fixed?</strong><br><strong>A:</strong> User saved to DB but email failed, causing duplicate error on retry; fixed with transactions and dev-mode skip.</p>
+<hr>
+<h2>37. CONCLUSION</h2>
+<p>The <strong>Rasops</strong> project successfully demonstrates a complete <strong>full-stack restaurant management solution</strong> integrating modern web technologies. It solves real operational problems—manual ordering, weak multi-branch control, and payment tracking—through a structured, role-based application.</p>
+<p>The system provides distinct experiences for <strong>owners</strong>, <strong>managers</strong>, and <strong>customers</strong>, with QR ordering as the standout feature. Integration with <strong>JWT authentication</strong>, <strong>MySQL persistence</strong>, and <strong>Razorpay payments</strong> shows practical industry-aligned implementation.</p>
+<p>While limitations exist (email dependency, partial push setup, local-only CORS), the project forms a strong foundation for future enhancements such as mobile apps and inventory modules.</p>
+<p>This report, together with the working source code, fulfils the requirements of a <strong>professional diploma-level project</strong> and prepares the student for technical viva and demonstration.</p>
+<hr>
+<br>
+
+<p><strong>— End of Report —</strong></p>
+<p><em>Document generated for: Rasops Restaurant Management System</em><br><em>Format: Diploma Project Report | Printable PDF ready</em><br><em>Fill bracketed fields [Your Name], [College], [Guide] before submission.</em></p>
+</div>
+</body>
+</html>

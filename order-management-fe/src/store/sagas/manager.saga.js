@@ -1,0 +1,57 @@
+import { toast } from 'react-toastify';
+import { all, put, takeLatest } from 'redux-saga/effects';
+import * as service from '../../services/manager.service';
+import { getManagerSuccess, getManagersRequest, setFormInfo, setSelectedRow } from '../slice';
+import { GET_MANAGERS_REQUEST, CREATE_MANAGER_REQUEST, REMOVE_MANAGER_REQUEST, UPDATE_MANAGER_REQUEST } from '../types';
+
+function* getManagerRequestSaga() {
+    try {
+        const res = yield service.getManagers();
+        yield put(getManagerSuccess(res));
+    } catch (error) {
+        console.error(`Failed to login: ${error?.message}`);
+    }
+}
+function* createManagerRequestSaga(action) {
+    try {
+        const res = yield service.createManager(action.payload);
+        toast.success(res.message || 'Manager created successfully');
+        yield put(getManagersRequest());
+        yield put(setFormInfo(false));
+    } catch (error) {
+        toast.error(`Failed to create manager ${error.message}`);
+        yield put(setFormInfo(false));
+    }
+}
+
+function* updateManagerRequestSaga(action) {
+    try {
+        const { id, data } = action.payload;
+        const res = yield service.updateManager({ id, data });
+        toast.success(res.message);
+        yield put(getManagersRequest());
+        yield put(setFormInfo(false));
+    } catch (error) {
+        toast.error(`Failed to update manager ${error.message}`);
+        yield put(setFormInfo(false));
+    }
+}
+function* removeManagerRequestSaga(action) {
+    try {
+        const { id } = action.payload;
+        const res = yield service.removeManager(id);
+        toast.success(res.message);
+        yield put(setSelectedRow(false));
+        yield put(getManagersRequest());
+    } catch (error) {
+        toast.error(`Failed to remove manager ${error.message}`);
+        yield put(setSelectedRow(false));
+    }
+}
+
+export default function* managerSaga() {
+    yield all([takeLatest(GET_MANAGERS_REQUEST, getManagerRequestSaga)]);
+    yield all([takeLatest(CREATE_MANAGER_REQUEST, createManagerRequestSaga)]);
+    yield all([takeLatest(UPDATE_MANAGER_REQUEST, updateManagerRequestSaga)]);
+    yield all([takeLatest(REMOVE_MANAGER_REQUEST, removeManagerRequestSaga)]);
+}
