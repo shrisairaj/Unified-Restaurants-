@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import mysql2 from 'mysql2';
 import { Sequelize } from 'sequelize';
 import defineAssociations from '../api/models/associations.js';
@@ -64,6 +65,53 @@ const getSequelizeInstance = async () => {
         sequelizeInstance = await createDatabase();
     }
     return sequelizeInstance;
+};
+
+const encryptPassword = (password) => CryptoJS.AES.encrypt(password, env.cryptoSecret).toString();
+
+const ensureAdminUser = async () => {
+    const adminEmail = 'admin@gmail.com';
+    const defaultPassword = 'admin@123';
+    const defaultPhone = '9999999999';
+
+    const existingAdmin = await db.users.findOne({ where: { email: adminEmail } });
+    if (existingAdmin) {
+        if (existingAdmin.role === 'ADMIN') {
+            await db.users.update(
+                {
+                    password: encryptPassword(defaultPassword),
+                    status: 'ACTIVE'
+                },
+                { where: { email: adminEmail } }
+            );
+            logger('info', '✅ Existing admin credentials synchronized with default values.');
+        } else {
+            logger('warn', `User with email ${adminEmail} exists but is not ADMIN. Default admin account was not created.`);
+        }
+        return;
+    }
+
+    let phoneNumber = defaultPhone;
+    const existingPhone = await db.users.findOne({ where: { phoneNumber } });
+    if (existingPhone) {
+        phoneNumber = `9${Date.now().toString().slice(-9)}`;
+    }
+
+    try {
+        await db.users.create({
+            id: 'admin',
+            firstName: 'Super',
+            lastName: 'Admin',
+            email: adminEmail,
+            phoneNumber,
+            password: encryptPassword(defaultPassword),
+            status: 'ACTIVE',
+            role: 'ADMIN'
+        });
+        logger('info', '✅ Default admin user created: admin@gmail.com / admin@123');
+    } catch (error) {
+        logger('error', `❌ Failed to create default admin user: ${error.message}`);
+    }
 };
 
 const defineModels = (sequelize) => {
@@ -161,9 +209,18 @@ const initDb = async () => {
         } catch (e) {}
 
         try {
+            await sequelize.query(`ALTER TABLE \`users\` MODIFY COLUMN \`role\` ENUM('OWNER','MANAGER','ADMIN') NOT NULL;`);
+            logger('info', '✅ User role ENUM updated to include ADMIN');
+        } catch (e) {
+            logger('error', `❌ Error updating user role enum: ${e.message}`);
+        }
+
+        try {
             await sequelize.query(`ALTER TABLE \`orders\` DROP INDEX \`orderNumber\`;`);
             logger('info', '✅ Removed unique index from orders.orderNumber');
         } catch (e) {}
+
+        await ensureAdminUser();
 
         try {
             await sequelize.query(`UPDATE \`orders\` SET \`subtotalAmount\` = \`price\`, \`cgstAmount\` = ROUND(\`price\` * 0.025), \`sgstAmount\` = ROUND(\`price\` * 0.025), \`finalAmount\` = \`price\` + ROUND(\`price\` * 0.025) * 2 WHERE \`finalAmount\` IS NULL;`);

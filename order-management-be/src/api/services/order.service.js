@@ -321,7 +321,11 @@ const placeOrder = async (payload) => {
             path: 'orders',
             meta: {
                 action: NOTIFICATION_ACTIONS.ORDER_PLACEMENT,
-                tableId: payload.tableId
+                tableId: payload.tableId,
+                orderNumber,
+                tableNumber: payload.tableNumber,
+                totalAmount: totalPrice,
+                hotelId
             }
         });
 
@@ -616,13 +620,9 @@ const completed = async (hotelId, filters) => {
         };
 
         if (filterKey && filterValue) {
-            let mappedKey = filterKey;
             const isOrderNumberFilter = filterKey === 'orderNumber';
-            if (filterKey === 'tableNumber') {
-                mappedKey = '$orders.table.tableNumber$';
-            } else if (filterKey === 'orderStatus') {
-                mappedKey = '$orders.status$';
-            }
+            const isTableNumberFilter = filterKey === 'tableNumber';
+            const isOrderStatusFilter = filterKey === 'orderStatus';
 
             if (isOrderNumberFilter) {
                 options.include[0].where = {
@@ -631,21 +631,25 @@ const completed = async (hotelId, filters) => {
                         [Op.like]: `%${filterValue}%`
                     }
                 };
-            }
-
-            if (filterKey === 'orderId') {
+            } else if (isTableNumberFilter) {
+                const tableNum = Number(filterValue);
+                if (!Number.isNaN(tableNum)) {
+                    options.include[1].where = { tableNumber: tableNum };
+                    options.include[1].required = true;
+                }
+            } else if (isOrderStatusFilter) {
+                options.include[0].where = {
+                    ...options.include[0].where,
+                    status: {
+                        [Op.like]: `%${filterValue}%`
+                    }
+                };
+            } else if (filterKey === 'orderId') {
                 const custId = filterValue.split('-')[0];
                 options.where = {
                     hotelId,
                     id: {
                         [Op.like]: `%${custId}%`
-                    }
-                };
-            } else if (!isOrderNumberFilter) {
-                options.where = {
-                    hotelId,
-                    [mappedKey]: {
-                        [Op.like]: `%${filterValue}%`
                     }
                 };
             }
@@ -654,7 +658,7 @@ const completed = async (hotelId, filters) => {
         if (sortKey && sortOrder) {
             let orderArray = [];
             if (sortKey === 'tableNumber') {
-                orderArray = [[db.orders, db.tables, 'tableNumber', sortOrder]];
+                orderArray = [[db.tables, 'tableNumber', sortOrder]];
             } else if (sortKey === 'orderStatus') {
                 orderArray = [[db.orders, 'status', sortOrder]];
             } else if (sortKey === 'orderTime') {
@@ -876,6 +880,24 @@ const updateOrderStatus = async (hotelId, orderId, newStatus) => {
             throw CustomError(STATUS_CODE.FORBIDDEN, `Unauthorized access to this order`);
         }
 
+        const existingOrders = await orderRepo.find({
+            where: {
+                customerId,
+                edited: editedVersion
+            },
+            attributes: ['status'],
+            limit: 1
+        });
+
+        const currentStatus = existingOrders?.rows?.[0]?.status;
+        if (!currentStatus) {
+            throw CustomError(STATUS_CODE.NOT_FOUND, 'Order not found');
+        }
+
+        if (currentStatus === ORDER_STATUS[2] && newStatus === ORDER_STATUS[3]) {
+            throw CustomError(STATUS_CODE.BAD_REQUEST, 'Cannot complete a cancelled order');
+        }
+
         // Update all orders for this customer matching this edited version
         const updateOptions = {
             where: {
@@ -1039,8 +1061,8 @@ const cancelOrder = async (orderId) => {
             throw CustomError(STATUS_CODE.NOT_FOUND, 'Order not found');
         }
 
-        // Check if order is in PENDING or SERVED status
-        if (![ORDER_STATUS[0], ORDER_STATUS[1]].includes(order.status)) {
+        // Check if order is in PENDING status only
+        if (order.status !== ORDER_STATUS[0]) {
             throw CustomError(STATUS_CODE.BAD_REQUEST, `Cannot cancel order with status ${order.status}`);
         }
 

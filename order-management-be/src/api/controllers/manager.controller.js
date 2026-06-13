@@ -1,7 +1,13 @@
+import CryptoJS from 'crypto-js';
+import env from '../../config/env.js';
 import logger from '../../config/logger.js';
 import managerService from '../services/manager.service.js';
 import { STATUS_CODE } from '../utils/common.js';
-import { updateManagerValidation, createManagerValidation } from '../validations/manager.validation.js';
+import {
+    updateManagerValidation,
+    createManagerValidation,
+    updateManagerCredentialsValidation
+} from '../validations/manager.validation.js';
 
 const fetch = async (req, res) => {
     try {
@@ -56,12 +62,39 @@ const update = async (req, res) => {
     }
 };
 
+const updateCredentials = async (req, res) => {
+    try {
+        const managerId = req.params.id;
+        const ownerId = req.user.id;
+        const { email, password } = req.body;
+
+        const payload = { email };
+        if (password) {
+            const decryptedPassword = CryptoJS.AES.decrypt(password, env.cryptoSecret).toString(CryptoJS.enc.Utf8);
+            payload.password = decryptedPassword;
+        }
+
+        const validation = updateManagerCredentialsValidation(payload);
+        if (validation.error) {
+            logger('error', `Update credentials validation error ${JSON.stringify({ error: validation.error })}`);
+            return res.status(STATUS_CODE.BAD_REQUEST).send({ message: validation.error.message });
+        }
+
+        const result = await managerService.updateCredentials(managerId, ownerId, payload);
+        return res.status(STATUS_CODE.OK).send(result);
+    } catch (error) {
+        logger('error', 'Error while updating manager credentials', { error });
+        return res.status(error.code).send({ message: error.message });
+    }
+};
+
 const remove = async (req, res) => {
     try {
         const managerId = req.params.id;
+        const ownerId = req.user.id;
         logger('debug', `Received request to remove manager ${managerId}`);
 
-        const result = await managerService.remove(managerId);
+        const result = await managerService.remove(managerId, ownerId);
         return res.status(STATUS_CODE.OK).send(result);
     } catch (error) {
         logger('error', 'Error while updating managers', { error });
@@ -120,6 +153,7 @@ const create = async (req, res) => {
 export default {
     fetch,
     update,
+    updateCredentials,
     remove,
     getAssignable,
     create

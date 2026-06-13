@@ -9,7 +9,7 @@ import Logo from '../../assets/images/rasops.png';
 import '../../assets/styles/sidebar.css';
 import env from '../../config/env';
 import { logoutRequest } from '../../store/slice';
-import { USER_ROLES, COMMON_TABS, MANAGER_TABS, OWNER_TABS } from '../../utils/constants';
+import { USER_ROLES, COMMON_TABS, MANAGER_TABS, OWNER_TABS, ADMIN_TABS } from '../../utils/constants';
 import Loader from '../Loader';
 import NoHotel from '../NoHotel';
 
@@ -34,10 +34,13 @@ function Sidebar() {
         const viewData = JSON.parse(
             CryptoJS.AES.decrypt(localStorage.getItem('data'), env.cryptoSecret).toString(CryptoJS.enc.Utf8)
         );
-        tabs =
-            Object.keys(viewData).length === 1 && viewData.role.toUpperCase() === USER_ROLES[0]
-                ? [...OWNER_TABS, ...COMMON_TABS].sort((a, b) => a.order - b.order)
-                : [...MANAGER_TABS, ...COMMON_TABS].sort((a, b) => a.order - b.order);
+        if (Object.keys(viewData).length === 1 && viewData.role.toUpperCase() === USER_ROLES[0]) {
+            tabs = [...OWNER_TABS, ...COMMON_TABS].sort((a, b) => a.order - b.order);
+        } else if (Object.keys(viewData).length === 1 && viewData.role.toUpperCase() === USER_ROLES[2]) {
+            tabs = [...ADMIN_TABS, ...COMMON_TABS].sort((a, b) => a.order - b.order);
+        } else {
+            tabs = [...MANAGER_TABS, ...COMMON_TABS].sort((a, b) => a.order - b.order);
+        }
     } catch (error) {
         toast.error('Oops! Something went wrong. Please try logging in again.');
         dispatch(logoutRequest());
@@ -54,11 +57,16 @@ function Sidebar() {
                 return <NoHotel />;
             } else if ([...MANAGER_TABS, ...COMMON_TABS].find((obj) => obj.path === location.pathname)) {
                 return <Outlet />;
-            } else {
-                <Loader />;
+            }
+        } else if (Object.keys(user).length && user.role.toUpperCase() === USER_ROLES[2]) {
+            if (
+                location.pathname.startsWith('/admin') ||
+                [...COMMON_TABS].find((obj) => obj.path === location.pathname)
+            ) {
+                return <Outlet />;
             }
         }
-        return <></>;
+        return <Loader />;
     };
 
     return (

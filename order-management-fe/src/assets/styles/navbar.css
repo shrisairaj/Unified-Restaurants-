@@ -1,4 +1,4 @@
-.hide-dropdown-arrow .dropdown-toggle::after {
+﻿.hide-dropdown-arrow .dropdown-toggle::after {
     display: none !important;
 }
 

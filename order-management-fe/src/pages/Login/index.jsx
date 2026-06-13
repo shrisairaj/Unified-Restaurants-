@@ -60,6 +60,7 @@ function Login() {
                                 <option value="">-- Select Role --</option>
                                 <option value="OWNER">Owner</option>
                                 <option value="MANAGER">Manager</option>
+                                <option value="ADMIN">Admin</option>
                             </Field>
                             <ErrorMessage name="role">
                                 {msg => <div className="text-danger small">{msg}</div>}

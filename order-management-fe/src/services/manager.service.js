@@ -28,6 +28,16 @@ export const updateManager = async (payload) => {
     }
 };
 
+export const updateManagerCredentials = async (payload) => {
+    try {
+        const { id, data } = payload;
+        return await api(method.PATCH, `/manager/${id}/credentials`, data);
+    } catch (error) {
+        console.error(`Error while updating manager credentials ${error}`);
+        throw error;
+    }
+};
+
 export const removeManager = async (id) => {
     try {
         return await api(method.DELETE, `/manager/${id}`);

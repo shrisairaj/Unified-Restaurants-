@@ -19,7 +19,8 @@ function OMTModal({
     initialValues = {},
     validationSchema = '',
     additionalButtons = [],
-    isLoading = false
+    isLoading = false,
+    submitDisabled = false
 }) {
     const FormComponent = ({ description }) => (
         <Formik
@@ -98,7 +99,7 @@ function OMTModal({
                     type="submit"
                     onClick={handleSubmit}
                     className="custom-button"
-                    disabled={isLoading}
+                    disabled={isLoading || submitDisabled}
                     label={submitText}
                 />
             )}

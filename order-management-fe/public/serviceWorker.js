@@ -1,4 +1,4 @@
-const appUrl = 'http://localhost:3000';
+﻿const appUrl = 'http://localhost:3000';
 
 self.addEventListener('push', function (event) {
     let data;

@@ -36,7 +36,7 @@ export const loginSchema = Yup.object().shape({
             'Password must contain at least 8 characters, one letter, one number, and one special character'
         )
         .required('Password is required'),
-    role: Yup.string().oneOf(['OWNER', 'MANAGER'], 'Select a valid role').required('Role is required')
+    role: Yup.string().oneOf(['OWNER', 'MANAGER', 'ADMIN'], 'Select a valid role').required('Role is required')
 });
 
 export const emailSchema = Yup.object().shape({

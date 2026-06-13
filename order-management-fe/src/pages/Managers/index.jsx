@@ -4,7 +4,7 @@ import CryptoJS from 'crypto-js';
 import moment from 'moment';
 
 import { MdDeleteForever } from 'react-icons/md';
-import { TbUserEdit } from 'react-icons/tb';
+import { TbKey, TbUserEdit } from 'react-icons/tb';
 import { TiPlus } from 'react-icons/ti';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionDropdown from '../../components/ActionDropdown';
@@ -20,6 +20,7 @@ import {
     setFormInfo,
     setHotelOption,
     setSelectedRow,
+    updateManagerCredentialsRequest,
     updateManagerRequest
 } from '../../store/slice/manager.slice';
 
@@ -53,6 +54,18 @@ function Managers() {
         };
     };
 
+    const editCredentialsOptions = (data) => {
+        const { email, id } = data;
+        return {
+            ...credentialsOptions,
+            managerId: id,
+            initialValues: {
+                email,
+                password: ''
+            }
+        };
+    };
+
     const createOptions = {
         action: 'create',
         title: 'Create New Manager',
@@ -68,6 +81,17 @@ function Managers() {
         closeText: 'Close'
     };
 
+    const credentialsOptions = {
+        action: 'credentials',
+        title: 'Edit Manager Credentials',
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        submitText: 'Update Credentials',
+        closeText: 'Close'
+    };
+
     const getHotelOptions = (currentHotelId) => {
         const assignedHotelIds = data?.rows?.map((row) => row?.hotel?.id).filter(Boolean) || [];
         return (
@@ -77,7 +101,22 @@ function Managers() {
         );
     };
 
-    const formFields = {
+    const credentialFields = {
+        email: {
+            ...managerOptions.email,
+            label: 'Manager Login ID / Email',
+            required: false,
+            disabled: false
+        },
+        password: {
+            ...managerOptions.password,
+            label: 'Password (leave blank to keep current)',
+            required: false,
+            disabled: false
+        }
+    };
+
+    let formFields = {
         ...managerOptions,
         hotel: {
             ...managerOptions.hotel,
@@ -100,6 +139,10 @@ function Managers() {
             disabled: formInfo?.action === 'update'
         }
     };
+
+    if (formInfo?.action === 'credentials') {
+        formFields = credentialFields;
+    }
 
     /** ** pagination state ****/
     const [pagination, setPagination] = useState({
@@ -179,6 +222,15 @@ function Managers() {
                 hotelId: values.hotel?.value
             };
             dispatch(createManagerRequest(payload));
+        } else if (formInfo?.action === 'credentials') {
+            const { managerId } = formInfo;
+            const payload = {
+                email: values.email
+            };
+            if (values.password) {
+                payload.password = CryptoJS.AES.encrypt(values.password, env.cryptoSecret).toString();
+            }
+            dispatch(updateManagerCredentialsRequest({ id: managerId, data: payload }));
         } else {
             const { initialValues, managerId } = formInfo;
             const payload = {
@@ -244,6 +296,13 @@ function Managers() {
                                 icon: TbUserEdit,
                                 onClick: () => {
                                     dispatch(setFormInfo(updateOptions(row.original)));
+                                }
+                            },
+                            {
+                                label: 'Edit Credentials',
+                                icon: TbKey,
+                                onClick: () => {
+                                    dispatch(setFormInfo(editCredentialsOptions(row.original)));
                                 }
                             },
                             {

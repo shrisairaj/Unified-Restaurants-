@@ -41,7 +41,7 @@ export const loginValidation = (payload) => {
                 tlds: { allow: ['com', 'net'] }
             }),
             password: Joi.string().pattern(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
-            role: Joi.string().valid('OWNER', 'MANAGER').required()
+            role: Joi.string().valid('OWNER', 'MANAGER', 'ADMIN').required()
         });
 
         return schema.validate(payload);

@@ -9,6 +9,7 @@ import orderRoutes from './order.routes.js';
 import subscriptionRoutes from './subscription.routes.js';
 import tableRoutes from './tables.routes.js';
 import userRoutes from './user.routes.js';
+import adminRoutes from './admin.routes.js';
 
 const router = Router();
 router.use('/user', userRoutes);
@@ -21,5 +22,6 @@ router.use('/notification', notificationRoutes);
 router.use('/checkout', checkoutRoutes);
 router.use('/subscription', subscriptionRoutes);
 router.use('/customer-payment', customerPaymentRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;

@@ -6,6 +6,7 @@ import { BsInfoCircleFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import OMTModal from '../../components/Modal';
+import { handleManagerServiceWorkerMessage } from '../../utils/orderNotifications';
 import '../../assets/styles/orders.css';
 import Table from '../../components/Table';
 import * as orderService from '../../services/order.service';
@@ -21,7 +22,7 @@ import {
     updateOrderStatusRequest,
     clearOrderDetails
 } from '../../store/slice';
-import { NOTIFICATION_ACTIONS, ORDER_STATUS } from '../../utils/constants';
+import { ORDER_STATUS } from '../../utils/constants';
 
 function Orders() {
     const dispatch = useDispatch();
@@ -39,23 +40,25 @@ function Orders() {
     } = useSelector((state) => state.orders);
 
     useEffect(() => {
+        const currentParams = {
+            skip: pagination?.pageIndex ? pagination?.pageIndex * pagination?.pageSize : undefined,
+            limit: pagination?.pageSize,
+            sortKey: sorting[0]?.id,
+            sortOrder: sorting[0] ? (sorting[0].desc ? 'desc' : 'asc') : undefined,
+            filterKey: filtering?.field,
+            filterValue: filtering?.value
+        };
+
         const handleServiceWorkerMessage = (event) => {
-            const { meta } = event.data;
-            const currentParams = {
-                skip: pagination?.pageIndex ? pagination?.pageIndex * pagination?.pageSize : undefined,
-                limit: pagination?.pageSize,
-                sortKey: sorting[0]?.id,
-                sortOrder: sorting[0] ? (sorting[0].desc ? 'desc' : 'asc') : undefined,
-                filterKey: filtering?.field,
-                filterValue: filtering?.value
-            };
-            switch (meta?.action) {
-                case NOTIFICATION_ACTIONS.CUSTOMER_REGISTERATION:
-                case NOTIFICATION_ACTIONS.ONLINE_PAYMENT_CONFIRMED:
-                case NOTIFICATION_ACTIONS.ORDER_PLACEMENT:
+            handleManagerServiceWorkerMessage(event, {
+                showToast: false,
+                onOrderPlacement: () => {
+                    dispatch(getCompletedOrdersRequest({ hotelId, params: currentParams }));
+                },
+                onOrdersRefresh: (meta) => {
                     dispatch(getCompletedOrdersRequest({ hotelId: meta.hotelId || hotelId, params: currentParams }));
-                    break;
-                case NOTIFICATION_ACTIONS.PAYMENT_REQUEST:
+                },
+                onPaymentRequest: (meta) => {
                     dispatch(
                         setPaymentRequest({
                             title: 'Payment Request',
@@ -65,18 +68,19 @@ function Orders() {
                             customerId: meta.customerId
                         })
                     );
-                    break;
-                default:
-                    console.warn(`Unhandled notification action: ${meta.action}`);
-                    break;
-            }
+                }
+            });
         };
 
-        navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+        }
         return () => {
-            navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+            if (navigator.serviceWorker) {
+                navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+            }
         };
-    }, [pagination, sorting, filtering, hotelId]);
+    }, [pagination, sorting, filtering, hotelId, dispatch]);
 
     useEffect(() => {
         const params = {
@@ -124,7 +128,7 @@ function Orders() {
     };
 
     const handleMarkAsCompleted = () => {
-        if (!orderDetails) return;
+        if (!orderDetails || orderDetails.orderStatus === 'CANCELLED') return;
         dispatch(updateOrderStatusRequest({
             hotelId,
             orderId: orderDetails.orderId,
@@ -229,7 +233,8 @@ function Orders() {
                 }}
                 handleSubmit={handleMarkAsCompleted}
                 size={'lg'}
-                submitText={orderDetails.orderStatus !== 'COMPLETED' ? 'Mark as Completed' : null}
+                submitText={orderDetails.orderStatus !== 'COMPLETED' && orderDetails.orderStatus !== 'CANCELLED' ? 'Mark as Completed' : (orderDetails.orderStatus === 'CANCELLED' ? 'Order Cancelled' : null)}
+                submitDisabled={orderDetails.orderStatus === 'CANCELLED'}
                 closeText="Close"
                 additionalButtons={[
                     {
@@ -245,6 +250,17 @@ function Orders() {
 
     const columnHelper = createColumnHelper();
     const columns = [
+        columnHelper.display({
+            id: 'srNo',
+            header: 'Sr. No.',
+            minSize: 100,
+            cell: ({ row }) => {
+                if (!row.original || Object.keys(row.original).length === 0) return '';
+                const pageIndex = pagination?.pageIndex || 0;
+                const pageSize = pagination?.pageSize || 10;
+                return <div>{pageIndex * pageSize + row.index + 1}</div>;
+            }
+        }),
         columnHelper.display({
             id: 'orderNumber',
             header: 'Order Number',
@@ -395,22 +411,33 @@ function Orders() {
         <div className="d-flex flex-column my-4">
             <div>
                 <h6 className="mx-sm-5 mx-2">Orders</h6>
-                <div className="mx-sm-5 mx-2 mb-3 d-flex gap-2">
+                <div className="mx-sm-5 mx-2 mb-3 d-flex gap-2 align-items-center">
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by Order Number"
-                        value={filtering?.field === 'orderNumber' ? filtering?.value || '' : ''}
+                        placeholder={filtering?.field === 'tableNumber' ? 'Search by Table Number' : 'Search by Order Number'}
+                        value={filtering?.value || ''}
                         onChange={(e) => {
-                            dispatch(setOrderFiltering({ field: 'orderNumber', value: e.target.value }));
+                            dispatch(setOrderFiltering({ field: filtering?.field || 'orderNumber', value: e.target.value }));
                         }}
                         style={{ maxWidth: '300px' }}
                     />
-                    {filtering?.field === 'orderNumber' && filtering?.value && (
+                    <select
+                        className="form-select"
+                        value={filtering?.field || 'orderNumber'}
+                        onChange={(e) => {
+                            dispatch(setOrderFiltering({ field: e.target.value, value: filtering?.value || '' }));
+                        }}
+                        style={{ maxWidth: '180px' }}
+                    >
+                        <option value="orderNumber">Order Number</option>
+                        <option value="tableNumber">Table Number</option>
+                    </select>
+                    {filtering?.value && (
                         <button
                             className="btn btn-outline-secondary"
                             onClick={() => {
-                                dispatch(setOrderFiltering({ field: '', value: '' }));
+                                dispatch(setOrderFiltering({ field: filtering?.field || 'orderNumber', value: '' }));
                             }}
                         >
                             Clear

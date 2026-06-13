@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import MenuBackgroundImg from '../../assets/images/menu-background.png';
 import Loader from '../../components/Loader';
 import OMTModal from '../../components/Modal';
-import { getOrderStatus, getPublicOrderDetails, resetTable, downloadInvoice, cancelOrder } from '../../services/order.service';
+import { getOrderStatus, getPublicOrderDetails, downloadInvoice, cancelOrder } from '../../services/order.service';
 import { setOrderDetails, setTrackingOrder } from '../../store/slice';
 import '../../assets/styles/menuCard.css';
 
@@ -21,6 +21,8 @@ function OrderTracking() {
     const [cancellingOrder, setCancellingOrder] = useState(false);
     const [cancellationTimeLeft, setCancellationTimeLeft] = useState(300); // 5 minutes in seconds
     const [orderCreatedAt, setOrderCreatedAt] = useState(null);
+    const statusIntervalRef = useRef(null);
+    const countdownIntervalRef = useRef(null);
 
     useEffect(() => {
         if (!orderId) return;
@@ -90,10 +92,11 @@ function OrderTracking() {
             }
         };
 
-        const intervalId = setInterval(checkStatus, 5000);
+        statusIntervalRef.current = setInterval(checkStatus, 5000);
 
         return () => {
-            clearInterval(intervalId);
+            clearInterval(statusIntervalRef.current);
+            statusIntervalRef.current = null;
         };
     }, [orderId, loading]);
 
@@ -101,14 +104,17 @@ function OrderTracking() {
     useEffect(() => {
         if (!orderCreatedAt) return;
 
-        const countdownTimer = setInterval(() => {
+        countdownIntervalRef.current = setInterval(() => {
             const now = new Date();
             const secondsElapsed = Math.floor((now - orderCreatedAt) / 1000);
             const timeLeft = Math.max(0, 300 - secondsElapsed); // 5 minutes = 300 seconds
             setCancellationTimeLeft(timeLeft);
         }, 1000);
 
-        return () => clearInterval(countdownTimer);
+        return () => {
+            clearInterval(countdownIntervalRef.current);
+            countdownIntervalRef.current = null;
+        };
     }, [orderCreatedAt]);
 
     const playBeep = () => {
@@ -170,25 +176,45 @@ function OrderTracking() {
         }
     };
 
-    const handleCloseOrder = async () => {
-        try {
-            if (order?.tableId) {
-                await resetTable(order.tableId);
-            }
-        } catch (err) {
-            console.error('Failed to reset table', err);
-        } finally {
-            localStorage.removeItem('activeOrder');
-            dispatch(setOrderDetails({}));
-            dispatch(setTrackingOrder(null));
-            // Return to menu page with tableId
-            if (order?.tableId) {
-                navigate(`/menu/${order.tableId}`, { replace: true });
-            } else {
-                navigate('/', { replace: true });
-            }
+    const getCustomerOrderRoute = () => {
+        const storedToken = localStorage.getItem('customerToken');
+        if (storedToken) {
+            return `/place/${encodeURIComponent(storedToken)}`;
         }
+        if (order?.tableId) {
+            return `/place/${encodeURIComponent(order.tableId)}`;
+        }
+        return '/';
     };
+
+    const clearTrackingState = () => {
+        clearInterval(statusIntervalRef.current);
+        clearInterval(countdownIntervalRef.current);
+        statusIntervalRef.current = null;
+        countdownIntervalRef.current = null;
+        localStorage.removeItem('activeOrder');
+        dispatch(setOrderDetails({}));
+        dispatch(setTrackingOrder(null));
+    };
+
+    const handleCloseOrder = async () => {
+        clearTrackingState();
+        navigate(getCustomerOrderRoute(), { replace: true });
+    };
+
+    let statusBadgeClass = 'status-preparing';
+    let statusBadgeText = '🟡 Preparing';
+    let statusMessage = 'Your order has been received and is being prepared.';
+
+    if (liveStatus === 'COMPLETED') {
+        statusBadgeClass = 'status-ready';
+        statusBadgeText = '🟢 Order Ready';
+        statusMessage = 'Order Completed. Please collect your order.';
+    } else if (liveStatus === 'CANCELLED') {
+        statusBadgeClass = 'status-cancelled';
+        statusBadgeText = '🛑 Order Cancelled';
+        statusMessage = 'Your order has been cancelled successfully. No further processing will occur.';
+    }
 
     if (loading) {
         return <Loader />;
@@ -207,14 +233,12 @@ function OrderTracking() {
             <div className="tracking-container">
                 <div className="tracking-icon-confirmed">Order Confirmed ✅</div>
 
-                <div className={`tracking-status-badge ${liveStatus === 'COMPLETED' ? 'status-ready' : 'status-preparing'}`}>
-                    {liveStatus === 'COMPLETED' ? '🟢 Order Ready' : '🟡 Preparing'}
+                <div className={`tracking-status-badge ${statusBadgeClass}`}>
+                    {statusBadgeText}
                 </div>
 
                 <p className="mb-4 text-light-emphasis" style={{ fontSize: '15px' }}>
-                    {liveStatus === 'COMPLETED'
-                        ? 'Order Completed. Please collect your order.'
-                        : 'Your order has been received and is being prepared.'}
+                    {statusMessage}
                 </p>
 
                 <div className="tracking-detail-row">
@@ -237,7 +261,14 @@ function OrderTracking() {
                     <strong className="text-success">Paid</strong>
                 </div>
 
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexWrap: 'wrap' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        gap: '10px',
+                        marginTop: '20px',
+                        flexWrap: 'wrap'
+                    }}
+                >
                     <button
                         className="btn btn-primary tracking-btn"
                         onClick={handleDownloadInvoice}
@@ -268,7 +299,7 @@ function OrderTracking() {
                         </>
                     )}
 
-                    {liveStatus === 'COMPLETED' && (
+                    {(liveStatus === 'COMPLETED' || liveStatus === 'CANCELLED') && (
                         <button className="btn btn-success tracking-btn" onClick={handleCloseOrder}>
                             Close Order
                         </button>

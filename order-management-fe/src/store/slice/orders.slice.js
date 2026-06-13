@@ -90,7 +90,7 @@ const ordersSlice = createSlice({
         completedCount: 0,
         selectedTable: '',
         sorting: [],
-        filtering: {},
+        filtering: { field: 'orderNumber', value: '' },
         pagination: {
             pageIndex: 0,
             pageSize: 10

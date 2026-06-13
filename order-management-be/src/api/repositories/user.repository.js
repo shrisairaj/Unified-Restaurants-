@@ -30,6 +30,20 @@ const findOne = async (payload) => {
     }
 };
 
+const find = async (options = {}) => {
+    try {
+        logger('debug', 'Fetching user list in the database');
+        return JSON.parse(JSON.stringify(await db.users.findAndCountAll(options), null, 4));
+    } catch (error) {
+        const err = error?.errors?.[0]?.message;
+        logger('error', `Error occurred while finding user list: ${err || error.message}`);
+        if (isCustomError(error)) {
+            throw error;
+        }
+        throw mapSequelizeError(error);
+    }
+};
+
 const remove = async (options) => {
     try {
         logger('debug', 'Removing user data in the database');

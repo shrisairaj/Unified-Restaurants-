@@ -165,6 +165,10 @@ function* getUserRequestSaga(action) {
             ) {
                 navigate('/dashboard');
             }
+
+            if (res.role.toUpperCase() === USER_ROLES[2] && !path.startsWith('/admin')) {
+                navigate('/admin/dashboard');
+            }
         }
     } catch (error) {
         console.error(`Failed to get user: ${error?.message}`);

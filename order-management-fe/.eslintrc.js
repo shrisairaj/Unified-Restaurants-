@@ -1,4 +1,5 @@
-module.exports = {
+﻿module.exports = {
+    // Allow Windows (CRLF) development while enforcing LF in repo via .gitattributes
     env: {
         browser: true,
         es2021: true,
@@ -33,7 +34,8 @@ module.exports = {
         'no-trailing-spaces': 'error',
         'eol-last': ['error', 'always'],
         quotes: ['error', 'single', { allowTemplateLiterals: true }],
-        'linebreak-style': ['error', 'unix'],
+        // Disabled to avoid failing the dev server on Windows CRLF line endings
+        'linebreak-style': 'off',
         'space-before-function-paren': 'off',
         'generator-star-spacing': 'off',
         'multiline-ternary': 'off',

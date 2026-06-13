@@ -15,6 +15,23 @@ export const updateManagerValidation = (payload) => {
     }
 };
 
+export const updateManagerCredentialsValidation = (payload) => {
+    try {
+        const schema = Joi.object({
+            email: Joi.string().email().messages({
+                'string.email': 'Please enter a valid email'
+            }).optional(),
+            password: Joi.string()
+                .pattern(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+                .optional()
+        }).or('email', 'password');
+        return schema.validate(payload);
+    } catch (error) {
+        logger('error', 'Error in update manager credentials validation', { error });
+        throw CustomError(error.code, error.message);
+    }
+};
+
 export const createManagerValidation = (payload) => {
     try {
         const schema = Joi.object({

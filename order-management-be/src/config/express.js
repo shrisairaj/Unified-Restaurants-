@@ -13,7 +13,7 @@ app.use(express.json());
 // allow localhost frontend for cors
 const corsOptions = {
     origin: ['http://localhost:3000', 'http://localhost:3001'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true
 };
 

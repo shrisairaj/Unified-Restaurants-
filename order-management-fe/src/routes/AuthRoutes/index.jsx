@@ -5,6 +5,8 @@ import Loader from '../../components/Loader';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
 import { getUserRequest } from '../../store/slice';
+import { USER_ROLES } from '../../utils/constants';
+import { handleManagerServiceWorkerMessage } from '../../utils/orderNotifications';
 
 function AuthRoutes() {
     const token = localStorage.getItem('token');
@@ -23,6 +25,21 @@ function AuthRoutes() {
             dispatch(getUserRequest());
         }
     }, [token, user, dispatch]);
+
+    useEffect(() => {
+        if (user.role !== USER_ROLES[1] || !navigator.serviceWorker) {
+            return undefined;
+        }
+
+        const handleServiceWorkerMessage = (event) => {
+            handleManagerServiceWorkerMessage(event);
+        };
+
+        navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+        return () => {
+            navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+        };
+    }, [user.role]);
 
     if (!token) {
         return <Navigate to="/login" replace />;
@@ -47,11 +64,25 @@ function AuthRoutes() {
                 return <Navigate to="/subscription" replace />;
             }
         }
+
+        if (location.pathname.startsWith('/admin')) {
+            return <Navigate to="/hotels" replace />;
+        }
     }
 
     if (user.role === 'MANAGER') {
         if (location.pathname === '/subscription') {
             return <Navigate to="/dashboard" replace />;
+        }
+
+        if (location.pathname.startsWith('/admin')) {
+            return <Navigate to="/dashboard" replace />;
+        }
+    }
+
+    if (user.role === 'ADMIN') {
+        if (!location.pathname.startsWith('/admin')) {
+            return <Navigate to="/admin/dashboard" replace />;
         }
     }
 

@@ -2,7 +2,13 @@ import { toast } from 'react-toastify';
 import { all, put, takeLatest } from 'redux-saga/effects';
 import * as service from '../../services/manager.service';
 import { getManagerSuccess, getManagersRequest, setFormInfo, setSelectedRow } from '../slice';
-import { GET_MANAGERS_REQUEST, CREATE_MANAGER_REQUEST, REMOVE_MANAGER_REQUEST, UPDATE_MANAGER_REQUEST } from '../types';
+import {
+    GET_MANAGERS_REQUEST,
+    CREATE_MANAGER_REQUEST,
+    REMOVE_MANAGER_REQUEST,
+    UPDATE_MANAGER_REQUEST,
+    UPDATE_MANAGER_CREDENTIALS_REQUEST
+} from '../types';
 
 function* getManagerRequestSaga() {
     try {
@@ -36,6 +42,18 @@ function* updateManagerRequestSaga(action) {
         yield put(setFormInfo(false));
     }
 }
+function* updateManagerCredentialsRequestSaga(action) {
+    try {
+        const { id, data } = action.payload;
+        const res = yield service.updateManagerCredentials({ id, data });
+        toast.success(res.message);
+        yield put(getManagersRequest());
+        yield put(setFormInfo(false));
+    } catch (error) {
+        toast.error(`Failed to update manager credentials ${error.message}`);
+        yield put(setFormInfo(false));
+    }
+}
 function* removeManagerRequestSaga(action) {
     try {
         const { id } = action.payload;
@@ -53,5 +71,6 @@ export default function* managerSaga() {
     yield all([takeLatest(GET_MANAGERS_REQUEST, getManagerRequestSaga)]);
     yield all([takeLatest(CREATE_MANAGER_REQUEST, createManagerRequestSaga)]);
     yield all([takeLatest(UPDATE_MANAGER_REQUEST, updateManagerRequestSaga)]);
+    yield all([takeLatest(UPDATE_MANAGER_CREDENTIALS_REQUEST, updateManagerCredentialsRequestSaga)]);
     yield all([takeLatest(REMOVE_MANAGER_REQUEST, removeManagerRequestSaga)]);
 }

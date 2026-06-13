@@ -9,6 +9,22 @@ import inviteRepo from '../repositories/invite.repository.js';
 import userRepo from '../repositories/user.repository.js';
 import { CustomError, STATUS_CODE, TABLES, isCustomError } from '../utils/common.js';
 
+const verifyManagerOwnership = async (managerId, ownerId) => {
+    const managerInvite = await inviteRepo.findOne({
+        where: {
+            userId: managerId,
+            ownerId,
+            status: INVITE_STATUS[1]
+        }
+    });
+
+    if (!managerInvite) {
+        throw CustomError(STATUS_CODE.NOT_FOUND, 'Manager not found');
+    }
+
+    return managerInvite;
+};
+
 const fetch = async (payload) => {
     try {
         const { owner, limit, skip, sortKey, sortOrder, filterKey, filterValue } = payload;
@@ -106,8 +122,10 @@ const fetch = async (payload) => {
     }
 };
 
-const update = async (prevHotel, currentHotel, manager) => {
+const update = async (prevHotel, currentHotel, manager, ownerId) => {
     try {
+        await verifyManagerOwnership(manager, ownerId);
+
         const existingManager = await userRepo.findOne({ where: { id: manager, role: USER_ROLES[1] } });
         if (!existingManager) {
             throw CustomError(STATUS_CODE.NOT_FOUND, 'Manager not found');
@@ -164,8 +182,10 @@ const update = async (prevHotel, currentHotel, manager) => {
     }
 };
 
-const remove = async (managerId) => {
+const remove = async (managerId, ownerId) => {
     try {
+        await verifyManagerOwnership(managerId, ownerId);
+
         const options = {
             where: { userId: managerId }
         };
@@ -233,6 +253,46 @@ const getAssignable = async (ownerId, filter) => {
         return { count: invites.count, rows };
     } catch (error) {
         logger('error', `Error while fetching assignable managers ${JSON.stringify(error)}`);
+        throw CustomError(error.code, error.message);
+    }
+};
+
+const updateCredentials = async (managerId, ownerId, payload) => {
+    try {
+        await verifyManagerOwnership(managerId, ownerId);
+
+        const existingManager = await userRepo.findOne({ where: { id: managerId, role: USER_ROLES[1] } });
+        if (!existingManager) {
+            throw CustomError(STATUS_CODE.NOT_FOUND, 'Manager not found');
+        }
+
+        if (payload.email) {
+            const existingEmailUser = await userRepo.findOne({ where: { email: payload.email } });
+            if (existingEmailUser && existingEmailUser.id !== managerId) {
+                throw CustomError(STATUS_CODE.CONFLICT, 'Email already registered');
+            }
+        }
+
+        const updateData = {};
+        if (payload.email) {
+            updateData.email = payload.email;
+        }
+        if (payload.password) {
+            updateData.password = payload.password;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return { message: 'Nothing to update' };
+        }
+
+        await userRepo.update({ where: { id: managerId } }, updateData);
+        if (payload.email) {
+            await inviteRepo.update({ userId: managerId }, { email: payload.email });
+        }
+
+        return { message: 'Manager credentials updated successfully' };
+    } catch (error) {
+        logger('error', 'Error while updating manager credentials', { error });
         throw CustomError(error.code, error.message);
     }
 };

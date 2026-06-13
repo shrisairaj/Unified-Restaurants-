@@ -73,6 +73,7 @@ const managerSlice = createSlice({
         },
         createManagerRequest() {},
         updateManagerRequest() {},
+        updateManagerCredentialsRequest() {},
         removeManagerRequest() {},
         setHotelOption(state, action) {
             state.managerOptions.hotel.options = action.payload;
@@ -87,6 +88,7 @@ export const {
     setFormInfo,
     createManagerRequest,
     updateManagerRequest,
+    updateManagerCredentialsRequest,
     removeManagerRequest,
     setHotelOption
 } = managerSlice.actions;

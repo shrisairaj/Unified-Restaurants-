@@ -1,5 +1,10 @@
 import React from 'react';
 import { Routes as Switch, Route, BrowserRouter, Navigate } from 'react-router-dom';
+import AdminDashboard from '../pages/AdminDashboard';
+import AdminLogin from '../pages/AdminLogin';
+import AdminOwnerDetail from '../pages/AdminOwnerDetail';
+import AdminOwners from '../pages/AdminOwners';
+import AdminRevenue from '../pages/AdminRevenue';
 import Dashboard from '../pages/Dashboard';
 import ForgotPassword from '../pages/ForgetPassword';
 import Hotels from '../pages/Hotels';
@@ -33,6 +38,7 @@ export default function Routes() {
                     <Route path="reset" element={<ResetPassword />} />
                     <Route path="place/:token" element={<OrderPlacement />} />
                     <Route path="track-order/:orderId" element={<OrderTracking />} />
+                    <Route path="admin/login" element={<AdminLogin />} />
                 </Route>
                 <Route path="/" element={<AuthRoutes />}>
                     <Route path="dashboard" element={<Dashboard />} />
@@ -44,6 +50,10 @@ export default function Routes() {
                     <Route path="tables" element={<Tables />} />
                     <Route path="orders" element={<Orders />} />
                     <Route path="subscription" element={<Subscription />} />
+                    <Route path="admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="admin/owners" element={<AdminOwners />} />
+                    <Route path="admin/owners/:id" element={<AdminOwnerDetail />} />
+                    <Route path="admin/revenue" element={<AdminRevenue />} />
                 </Route>
                 <Route path="/404" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="/404" />} />
